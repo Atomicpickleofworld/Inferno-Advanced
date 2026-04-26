@@ -1,0 +1,23 @@
+#the mod name as displayed in-game
+displayName: "Inferno Advanced"
+
+#the internal name of your mod
+name: "inferno-advanced"
+
+#your name
+author: "[#FF5733]AtomicPickle"
+
+#the fully qualified main class of the mod
+main: "infernoadvanced.InfernoAdvancedMod"
+
+#the mod description as seen in the mod dialog
+description: "A Mindustry Java mod."
+
+#the mod version
+version: alpha build 2.5
+
+#the minimum game build required to run this mod
+minGameVersion: 154
+
+#this is a java mod
+java: true

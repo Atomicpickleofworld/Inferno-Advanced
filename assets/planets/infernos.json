@@ -1,0 +1,168 @@
+{
+  "type": "Planet",
+  "name": "infernos",
+  "localizedName": "Infernos",
+  "description": "Пылающая планета-вулкан с бурлящими лавовыми озерами и токсичной атмосферой. Экстремальные температуры и богатые ресурсы.",
+  "alwaysUnlocked": true,
+  
+  "mesh": [
+    {
+      "type": "NoiseMesh",
+      "planet": "infernos",
+      "divisions": 5,
+      "seed": 7,
+      "radius": 0.615,
+      "color1": "8a0c0c",
+      "color2": "5a0000",
+      "octaves": 3.7,
+      "persistence": 1.1
+    },
+    {
+      "type": "NoiseMesh", 
+      "planet": "infernos",
+      "divisions": 5,
+      "radius": 0.621,
+      "seed": 94,
+      "color1": "ff5a00",
+      "color2": "ff3300",
+      "octaves": 3.7,
+      "persistence": 0.6
+    },
+    {
+      "type": "NoiseMesh",
+      "planet": "infernos",
+      "divisions": 6,
+      "seed": 101,
+      "radius": 0.622,
+      "color1": "3a3a3a",
+      "color2": "5a5a5a",
+      "octaves": 5.1,
+      "persistence": 0.8
+    },
+    {
+      "type": "NoiseMesh",
+      "planet": "infernos",
+      "seed": 69,
+      "divisions": 5,
+      "color1": "2a2a2a",
+      "color2": "1a1a1a",
+      "radius":  0.6,
+      "octaves": 4,
+      "persistence": 1,
+      "scale": 0.75,
+      "mag": 1
+    },
+    {
+      "type": "NoiseMesh",
+      "planet": "infernos",
+      "divisions": 5,
+      "seed": 19,
+      "radius": 0.6,
+      "color1": "ffdd00",
+      "color2": "ffaa00",
+      "octaves": 4.5,
+      "persistence": 1.1
+    },
+    {
+      "type": "NoiseMesh",
+      "planet": "infernos",
+      "divisions": 6,
+      "seed": 61,
+      "radius": 0.624,
+      "color1": "000000",
+      "color2": "110011",
+      "octaves": 4.5,
+      "persistence": 1.1
+    }
+  ],
+  
+  "cloudMesh": [
+    {
+      "type": "HexSkyMesh",
+      "planet": "infernos",
+      "speed": 1.21,
+      "radius": 0.12,
+      "divisions": 6,
+      "color": "ff55007e",
+      "octaves": 3,
+      "persistence": 0.3,
+      "scl": 1,
+      "thresh": 0.6
+    },
+    {
+      "type": "HexSkyMesh",
+      "planet": "infernos", 
+      "speed": 1.01,
+      "radius": 0.13,
+      "divisions": 6,
+      "color": "ff33007e",
+      "octaves": 3,
+      "persistence": 0.4,
+      "scl": 0.9,
+      "thresh": 0.6
+    },
+    {
+      "type": "HexSkyMesh",
+      "planet": "infernos",
+      "speed": 0.891,
+      "radius": 0.11,
+      "divisions": 6,
+      "color": "ff66007e",
+      "octaves": 3,
+      "persistence": 0.5,
+      "scl": 1.1,
+      "thresh": 0.6
+    }
+  ],
+  
+  "generator": {
+    "octaves": 3,
+    "persistence": 0.52,
+    "scale": 22,
+    "mag": 0.721,
+    "thresh": 1.152,
+    "min": 100,
+    "max": 100,
+    "radMin": 220,
+    "radMax": 600,
+    "lavaChance": 0.65,
+    "sulfurChance": 0.32,
+    "pyratiteChance": 0.45,
+    "obsidianChance": 0.26
+  },
+  
+  "orbitRadius": 75,
+  "sectorSize": 1,
+  "allowLaunchSchematics": true,
+  "allowLaunchToNumbered": false,
+  "allowLaunchLoadout": true,
+  "allowSectorInvasion": true,
+  "startSector": 15,
+  "orbitSpacing": 1,
+  "radius": 0.65,
+  "minZoom": 1,
+  "drawOrbit": true,
+  
+  "atmosphereRadIn": 0.02,
+  "atmosphereRadOut": 0.4,
+  "accessible": true,
+  "updateLighting": true,
+  "sectorSeed": 66613,
+  "bloom": false,
+  "visible": true,
+  
+  "atmosphereColor": "ff5500",
+  "iconColor": "ff3300",
+  "cloudColor": "5a2a1a",
+  "backgroundColor": "2a0c06",
+  
+  "hasAtmosphere": true,
+  "allowWaveSimulation": true,
+  "clearSectorOnLose": true,
+  "allowWaves": true,
+  "prebuildBase": false,
+  
+  "parent": "sun",
+  "solarSystem": "sun"
+
+}
