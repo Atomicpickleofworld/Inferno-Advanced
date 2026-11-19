@@ -97,8 +97,8 @@ public class InfernoUnits {
                 rotate = false;
                 shootCone = 30f;
                 reload = 22f;
-                shootSound = IASounds.shotUnitSwift;
-                shootSoundVolume = 0.07f;
+                shootSound = IASounds.shootWren;
+                shootSoundVolume = 0.5f;
 
                 bullet = new BasicBulletType(6f, 5f) {{
                     width = 1f;
@@ -170,7 +170,7 @@ public class InfernoUnits {
                 rotate = false;
                 shootCone = 45f;
                 inaccuracy = 1.5f;
-                shootSound = IASounds.shotUnitSwift;
+                shootSound = IASounds.shootSwift;
                 shootSoundVolume = 0.1f;
 
                 int speedbylife = 2;
@@ -179,7 +179,7 @@ public class InfernoUnits {
                     height = 13f;
                     lifetime = 15f/speedbylife;
                     sprite = "casing";
-                    shootSound = IASounds.shotUnitSwift;
+                    shootSound = IASounds.shootSwift;
                     backColor = Pal.bulletYellowBack;
                     frontColor = Pal.bulletYellow;
                     shootEffect = Fx.shootSmall;
@@ -344,7 +344,6 @@ public class InfernoUnits {
                 shootCone = 8f;
                 inaccuracy = 3f;
                 shake = 0.3f;
-                layerOffset = 10f;
 
                 controllable = false;
                 autoTarget = true;

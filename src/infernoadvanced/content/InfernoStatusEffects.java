@@ -28,28 +28,36 @@ public class InfernoStatusEffects {
 
     radiationWeak, radiationMedium, radiationStrong,
 
-    empLow, empMedium, empHigh,
+    empLow, empMedium, empHigh, empShock,
+
+    blindingWeak, blindingMedium, blindingStrong,
+
+    servoPartial, servoFull,
 
     gravityCollapse, battleHunger
     ;
 
     public static void load() {
 
-        radiationWeak   = new TieredStatusEffect("radiation-weak",   "radiation", 1) {{
-            color = Color.valueOf("b8d9a0"); // TODO: подобрать под IAPal
+        radiationWeak = new TieredStatusEffect("radiation-weak", "radiation", 1) {{
+            color = Pal.thoriumPink;
             show = true;
 
             healthMultiplier = 0.95f;
 
-            effectChance = 0.05f;
+            effectChance = 0.03f;
             transitionDamage = 5f;
-            effect = Fx.smokePuff;
+            effect = IAFx.Radiation.weak;
 
             init(() -> {
-                affinity(StatusEffects.wet, (unit, result, time) ->
-                        result.time = 0f);
-                affinity(StatusEffects.burning, (unit, result, time) ->
-                        result.set(radiationMedium, time * 1.5f));
+                opposite(StatusEffects.wet);
+
+                affinity(StatusEffects.blasted, (unit, result, time) -> {
+                    result.set(radiationMedium, time * 1.5f);
+                });
+                affinity(StatusEffects.burning, (unit, result, time) -> {
+                    result.set(radiationMedium, time * 1.3f);
+                });
             });
 
             techNode = new TechTree.TechNode(null, this, ItemStack.empty);
@@ -57,7 +65,7 @@ public class InfernoStatusEffects {
         }};
 
         radiationMedium = new TieredStatusEffect("radiation-medium", "radiation", 2) {{
-            color = Color.valueOf("8fbf60"); // TODO: подобрать под IAPal
+            color = IAPal.barium133;
             show = true;
 
             damage = 0.5f;
@@ -69,10 +77,14 @@ public class InfernoStatusEffects {
             effect = Fx.smoke;
 
             init(() -> {
-                affinity(StatusEffects.wet, (unit, result, time) ->
-                        result.set(radiationWeak, result.time));
-                affinity(StatusEffects.blasted, (unit, result, time) ->
-                        result.set(radiationStrong, time * 1.2f));
+                opposite(StatusEffects.wet);
+
+                affinity(StatusEffects.blasted, (unit, result, time) -> {
+                    result.set(radiationStrong, time * 1.4f);
+                });
+                affinity(StatusEffects.burning, (unit, result, time) -> {
+                    result.set(radiationStrong, time * 1.2f);
+                });
             });
 
             techNode = new TechTree.TechNode(null, this, ItemStack.empty);
@@ -80,7 +92,7 @@ public class InfernoStatusEffects {
         }};
 
         radiationStrong = new TieredStatusEffect("radiation-strong", "radiation", 3) {{
-            color = IAPal.cesium137AmmoFront;
+            color = IAPal.barium137m;
             show = true;
 
             damage = 1.2f;
@@ -98,27 +110,19 @@ public class InfernoStatusEffects {
                     Color.valueOf("a83800")
             };
 
-            effect = new Effect(40f, e -> {
-                Draw.color(Color.gray, Color.lightGray, e.fin());
-                Angles.randLenVectors(e.id, 3, 1f + e.fin() * 4f, (x, y) -> {
-                    Fill.circle(e.x + x, e.y + y, 0.5f + e.fout() * 1.5f);
-                });
-
-                Draw.blend(Blending.additive);
-                for(int i = 0; i < 4; i++){
-                    float angle = Mathf.randomSeed(e.id + i, 360f);
-                    float dist = Mathf.randomSeed(e.id + i + 100, 4f, 14f) * e.finpow();
-                    Tmp.v1.trns(angle, dist);
-
-                    int colorIndex = Mathf.randomSeed(e.id + i + 200, 0, 3);
-                    Draw.color(radColors[colorIndex], 0.7f * e.fout());
-                    Fill.circle(e.x + Tmp.v1.x, e.y + Tmp.v1.y, 2f * e.finpow() + 1f);
-                }
-                Draw.blend();
-            }).layer(Layer.effect);
+            effect = IAFx.Radiation.strong;
 
             init(() -> {
                 opposite(StatusEffects.overclock);
+
+                affinity(StatusEffects.blasted, (unit, result, time) -> {
+                    unit.damage(transitionDamage);
+                    result.time = Math.min(time + result.time, 400f);
+                });
+                affinity(StatusEffects.burning, (unit, result, time) -> {
+                    unit.damage(transitionDamage);
+                    result.time = Math.min(time + result.time, 300f);
+                });
             });
 
             techNode = new TechTree.TechNode(null, this, ItemStack.empty);
@@ -126,7 +130,7 @@ public class InfernoStatusEffects {
         }};
 
         empLow    = new TieredStatusEffect("emp-low",    "emp", 1) {{
-            color = Color.valueOf("c8e6ff");
+            color = IAPal.empLow;
 
             speedMultiplier = 0.75f;
             reloadMultiplier = 0.65f;
@@ -138,7 +142,7 @@ public class InfernoStatusEffects {
             outline = false;
 
             effectChance = 0.08f;
-            effect = Fx.electrified;
+            effect = Fx.overclocked;
             applyEffect = Fx.none;
 
             init(() -> {
@@ -153,7 +157,7 @@ public class InfernoStatusEffects {
         }};
 
         empMedium = new TieredStatusEffect("emp-medium", "emp", 2) {{
-            color = Color.valueOf("a3d9ff");
+            color = IAPal.empMedium;
 
             speedMultiplier = 0.5f;
             reloadMultiplier = 0.4f;
@@ -169,7 +173,7 @@ public class InfernoStatusEffects {
             intervalDamagePierce = false;
 
             effectChance = 0.12f;
-            effect = Fx.electrified;
+            effect = Fx.overclocked;
             applyEffect = Fx.hitEmpSpark;
 
             init(() -> {
@@ -184,7 +188,7 @@ public class InfernoStatusEffects {
         }};
 
         empHigh   = new TieredStatusEffect("emp-high",   "emp", 3) {{
-            color = Color.valueOf("7ecbff");
+            color = IAPal.empHigh;
 
             speedMultiplier = 0.25f;
             reloadMultiplier = 0.2f;
@@ -200,7 +204,7 @@ public class InfernoStatusEffects {
             intervalDamagePierce = true;
 
             effectChance = 0.2f;
-            effect = Fx.electrified;
+            effect = Fx.overclocked;
             applyEffect = Fx.hitEmpSpark;
 
             init(() -> {
@@ -214,8 +218,29 @@ public class InfernoStatusEffects {
             alwaysUnlocked = true;
         }};
 
+        empShock   = new TieredStatusEffect("emp-shock",   "emp", 4) {{
+            color = IAPal.empHigh;
+
+            disarm = true;
+            buildSpeedMultiplier = 0f;
+            speedMultiplier = 0f;
+
+            show = true;
+            outline = false;
+
+            effectChance = 0.2f;
+            effect = Fx.overclocked;
+            applyEffect = Fx.hitEmpSpark;
+
+            init(() -> {
+            });
+
+            techNode = new TechTree.TechNode(null, this, ItemStack.empty);
+            alwaysUnlocked = true;
+        }};
+
         gravityCollapse = new StatusEffect("gravity-collapse") {{
-            color = Color.valueOf("#ff5533");
+            color = IAPal.blackHoleArc;
             speedMultiplier = 0.6f;
             reloadMultiplier = 0.7f;
             healthMultiplier = 0.85f;
@@ -225,8 +250,8 @@ public class InfernoStatusEffects {
             intervalDamage = 10f;
             intervalDamageTime = 60f;
 
-            effect = IAFx.Turrets.singularityAccretion;
-            effectChance = 0.3f;
+            effect = IAFx.Particles.gravityCollapse;
+            effectChance = 0.05f;
 
             init(() -> {
                 opposite(StatusEffects.freezing);
@@ -242,7 +267,7 @@ public class InfernoStatusEffects {
         }};
 
         battleHunger = new StatusEffect("battle-hunger") {{
-            color = Pal.accent;
+            color = Color.scarlet;
 
             show = true;
 
@@ -256,14 +281,23 @@ public class InfernoStatusEffects {
             alwaysUnlocked = true;
         }};
 
+
+
+
+
+
+//sync with initialization
         for(StatusEffect s : new StatusEffect[]{
 
                 radiationWeak, radiationMedium, radiationStrong,
 
-                empLow, empMedium, empHigh,
+                empLow, empMedium, empHigh, empShock,
+
+                blindingWeak, blindingMedium, blindingStrong,
+
+                servoPartial, servoFull,
 
                 gravityCollapse, battleHunger
-
         }){
             s.allDatabaseTabs = true;
         }

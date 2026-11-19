@@ -73,4 +73,9 @@ public class IAPal {
             blackHoleArc       = Color.valueOf("ff8844"),
             blackHoleGlow      = Color.valueOf("f6d5a5");
 
+    public static  Color
+    emp = Color.valueOf("60b2d3"),
+    empLow = Color.valueOf("c8e6ff"),
+    empMedium = Color.valueOf("a3d9ff"),
+    empHigh = Color.valueOf("7ecbff");
 }

@@ -317,6 +317,63 @@ public class IAFx {
                 });
             }
         });
+
+        public static final Effect gravityCollapse = new Effect(30f, e -> {
+            float radius = 14f;
+
+            color(IAPal.blackHoleArc);
+            for(int i = 0; i < 1; i++){
+                float angle = e.rotation + i * 120f + Mathf.randomSeedRange(e.id + i, 20f);
+                float startR = radius * (0.6f + 0.4f * Mathf.randomSeed(e.id + i));
+                float r = startR * (1f - e.finpow());
+                float x = e.x + Angles.trnsx(angle, r);
+                float y = e.y + Angles.trnsy(angle, r);
+                Fill.circle(x, y, 1.6f * e.fout() + 0.3f);
+            }
+
+            color(IAPal.blackHoleArc, 0.35f * e.fout());
+            Fill.circle(e.x, e.y, 3f + 2f * e.fin());
+
+            color(IAPal.blackHoleArc, 0.5f * e.fout());
+            stroke(0.8f * e.fout());
+            Lines.circle(e.x, e.y, radius * (1f - e.fin()) + 2f);
+        });
+    }
+
+    public static class Radiation{
+        private static final Color[] strongColors = {
+                Color.valueOf("3a3a3a"),
+                Color.valueOf("c82020"),
+                Color.valueOf("6b0000"),
+                Color.valueOf("a83800")
+        };
+
+        public static final Effect
+                weak = new Effect(30f, e -> {
+            color(Color.gray, Pal.darkishGray, e.fin());
+            randLenVectors(e.id, 6, 4f + 30f * e.finpow(), (x, y) -> {
+                Fill.circle(e.x + x, e.y + y, e.fout() * 3f);
+                Fill.circle(e.x + x / 2f, e.y + y / 2f, e.fout());
+            });
+        }),
+                strong = new Effect(40f, e -> {
+                    color(Color.gray, Color.lightGray, e.fin());
+                    randLenVectors(e.id, 3, 1f + e.fin() * 4f, (x, y) -> {
+                        Fill.circle(e.x + x, e.y + y, 0.5f + e.fout() * 1.5f);
+                    });
+
+                    Draw.blend(Blending.additive);
+                    for(int i = 0; i < 4; i++){
+                        float angle = Mathf.randomSeed(e.id + i, 360f);
+                        float dist = Mathf.randomSeed(e.id + i + 100, 4f, 14f) * e.finpow();
+                        Tmp.v1.trns(angle, dist);
+
+                        int colorIndex = Mathf.randomSeed(e.id + i + 200, 0, 3);
+                        color(strongColors[colorIndex], 0.7f * e.fout());
+                        Fill.circle(e.x + Tmp.v1.x, e.y + Tmp.v1.y, 2f * e.finpow() + 1f);
+                    }
+                    Draw.blend();
+                }).layer(Layer.effect);
     }
 
     // ==========================================

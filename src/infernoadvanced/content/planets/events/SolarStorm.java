@@ -84,10 +84,6 @@ public class SolarStorm{
     private static float damageTimer, empTimer, toastTimer;
     private static Rules modifiedRules;
 
-    private static boolean stormActive;
-
-
-
     /** Вызывать при загрузке контента, после создания планет. */
     public static void load(){
         if(!Core.settings.has(NOTIFICATIONS_SETTING)){
@@ -140,8 +136,7 @@ public class SolarStorm{
                     String text = currentLevel < 0.5f ? "Слабая солнечная активность" :
                             currentLevel < 0.7f ? "Умеренная солнечная активность" :
                                     "Сильная солнечная активность!";
-                    Drawable icon = currentLevel < 0.5f ? Icon.up :
-                            currentLevel < 0.7f ? Icon.up : Icon.up;
+                    Drawable icon = Icon.up;
                     ui.hudfrag.showToast(icon, text);
                 }else{
                     ui.hudfrag.showToast(Icon.down, "Снижение солнечной активности");
@@ -166,7 +161,6 @@ public class SolarStorm{
 
     private static void reset(){
         intensity = exposure = passiveHeat = 0f;
-        stormActive = false;
         if(modifiedRules != null){
             modifiedRules.solarMultiplier = BASE_SOLAR;
             modifiedRules = null;
