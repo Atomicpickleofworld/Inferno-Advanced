@@ -2,9 +2,8 @@ package inferno.ui;
 
 import arc.Core;
 import arc.graphics.Color;
-import arc.scene.ui.ButtonGroup;
-import arc.scene.ui.TextButton;
 import arc.scene.ui.layout.Table;
+import infernoadvanced.content.planets.events.SolarStorm;
 import infernoadvanced.loaders.IAMeta;
 import mindustry.gen.Icon;
 import mindustry.ui.Styles;
@@ -19,52 +18,20 @@ public class InfernoUI {
     }
 
     private static void buildSettings(Table table) {
-        table.button("@mod.inferno-advanced.info", Icon.info, InfernoUI::showModInfo)
-                .size(240f, 60f)
-                .row();
+        table.button("@mod.inferno-advanced.about", Icon.info, InfernoUI::showAboutMod)
+                .size(240f, 60f).row();
+
+        table.button("@mod.inferno-advanced.wiki", Icon.book, InfernoUI::openWiki)
+                .size(240f, 60f).row();
+
+        table.button("@mod.inferno-advanced.settings", Icon.settings, InfernoUI::showModSettings)
+                .size(240f, 60f).row();
     }
 
-    //TODO wiki page, full redesign
+    public static void showAboutMod() {
+        BaseDialog dialog = new BaseDialog(Core.bundle.get("mod.inferno-advanced.about"));
 
-    public static void showModInfo() {
-        BaseDialog dialog = new BaseDialog(Core.bundle.get("mod.inferno-advanced.name"));
-
-        Table contentArea = new Table();
-        ButtonGroup<TextButton> tabGroup = new ButtonGroup<>();
-        tabGroup.setMinCheckCount(1);
-
-        TextButton overviewTab = tab(Core.bundle.get("mod.inferno-advanced.tab.overview"), tabGroup);
-        TextButton helpTab     = tab(Core.bundle.get("mod.inferno-advanced.tab.help"),     tabGroup);
-        overviewTab.setChecked(true);
-
-        dialog.cont.table(tabs -> {
-            tabs.defaults().size(200f, 50f).pad(2f);
-            tabs.add(overviewTab);
-            tabs.add(helpTab);
-        }).padBottom(10f).row();
-
-        dialog.cont.add(contentArea).grow().pad(10f);
-
-        overviewTab.clicked(() -> showOverview(contentArea));
-        helpTab.clicked(() -> showHelp(contentArea));
-
-        showOverview(contentArea);
-
-        dialog.buttons.button("@ok", dialog::hide).size(120f, 50f).pad(10f);
-        dialog.show();
-    }
-
-    private static TextButton tab(String text, ButtonGroup<TextButton> group) {
-        TextButton button = new TextButton(text, Styles.flatTogglet);
-        group.add(button);
-        return button;
-    }
-
-    /* ------------------------- OVERVIEW ------------------------- */
-
-    private static void showOverview(Table content) {
-        content.clear();
-        content.pane(Styles.noBarPane, pane -> {
+        dialog.cont.pane(Styles.noBarPane, pane -> {
             pane.table(info -> {
                 info.image(Core.atlas.find("inferno-advanced-icon", "inferno-advanced-frog"))
                         .size(96f).pad(20f).left();
@@ -103,36 +70,34 @@ public class InfernoUI {
                 }).pad(10f).left();
             }).pad(10f);
         }).grow();
+
+        dialog.buttons.button("@ok", dialog::hide).size(120f, 50f).pad(10f);
+        dialog.show();
     }
 
-    /* --------------------------- HELP --------------------------- */
+    public static void openWiki() {
+    }
 
-    private static void showHelp(Table content) {
-        content.clear();
-        content.pane(Styles.noBarPane, pane -> {
-            pane.table(help -> {
-                help.defaults().left().padBottom(6f);
 
-                help.add(Core.bundle.get("mod.inferno-advanced.help.title"))
+    public static void showModSettings() {
+        BaseDialog dialog = new BaseDialog(Core.bundle.get("mod.inferno-advanced.settings"));
+
+        dialog.cont.pane(Styles.noBarPane, pane -> {
+            pane.table(settings -> {
+                settings.defaults().left().padBottom(6f).width(400f);
+
+                settings.add(Core.bundle.get("mod.inferno-advanced.settings.title"))
                         .style(Styles.outlineLabel).fontScale(1.25f).padBottom(14f).row();
 
-                helpSection(help, "getting-started");
-                helpSection(help, "items");
-                helpSection(help, "turrets");
-                helpSection(help, "blackhole");
-                helpSection(help, "radiation");
-                helpSection(help, "mines");
-                helpSection(help, "units");
-                helpSection(help, "tips");
+                var cell = settings.check("Уведомления о солнечной активности",
+                        val -> Core.settings.put(SolarStorm.NOTIFICATIONS_SETTING, val));
+                cell.get().setChecked(Core.settings.getBool(SolarStorm.NOTIFICATIONS_SETTING, true));
+                cell.padBottom(10f).row();
+
             }).pad(10f).grow();
         }).grow();
-    }
 
-    private static void helpSection(Table parent, String key) {
-        parent.add(Core.bundle.get("mod.inferno-advanced.help." + key + ".title"))
-                .style(Styles.outlineLabel).padTop(8f).padBottom(2f).row();
-
-        parent.add(Core.bundle.get("mod.inferno-advanced.help." + key + ".desc"))
-                .wrap().width(500f).padBottom(10f).row();
+        dialog.buttons.button("@ok", dialog::hide).size(120f, 50f).pad(10f);
+        dialog.show();
     }
 }

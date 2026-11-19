@@ -42,6 +42,9 @@ public class InfernoAdvancedMod extends Mod {
     }
 
     /*
+    TODO bundles
+    TODO eng bundle after ru
+
     TODO add global changes warn
     TODO Ui settings integration
     TODO eng bundle

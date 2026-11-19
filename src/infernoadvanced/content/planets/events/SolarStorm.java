@@ -1,19 +1,24 @@
 package infernoadvanced.content.planets.events;
 
+import arc.Core;
 import arc.Events;
 import arc.math.Mathf;
 import arc.math.geom.Mat3D;
 import arc.math.geom.Vec3;
+import arc.scene.style.Drawable;
 import arc.struct.Seq;
 import arc.util.Time;
 import infernoadvanced.content.InfernoPlanets;
+import infernoadvanced.content.InfernoStatusEffects;
 import mindustry.content.Fx;
+import mindustry.entities.abilities.ForceFieldAbility;
 import mindustry.game.EventType.Trigger;
 import mindustry.game.Rules;
 import mindustry.game.Team;
 import mindustry.game.Teams.TeamData;
 import mindustry.gen.Building;
 import mindustry.gen.Groups;
+import mindustry.gen.Icon;
 import mindustry.gen.Unit;
 import mindustry.logic.LAccess;
 import mindustry.type.Sector;
@@ -37,6 +42,8 @@ import static mindustry.Vars.*;
  * меняется вместе с вращением планеты (день/ночь). Ночная сторона защищена.
  */
 public class SolarStorm{
+    // --- интерфейс ---
+    public static final String NOTIFICATIONS_SETTING = "inferno-solar-notifications";
     // --- ориентация сектора ---
     /** getLight() ниже этого значения: сектор в тени, шторма нет. */
     public static final float SHADOW_LIGHT = 0.5f;
@@ -46,6 +53,7 @@ public class SolarStorm{
     // --- шторм ---
     /** Базовый нагрев: постоянный фон на дневной стороне, 0..1 от полного эффекта. */
     public static final float PASSIVE_HEAT = 0.12f;
+    private static float lastIntensityLevel = 0f;
 
     // --- радиация ---
     public static final float DAMAGE_INTERVAL = 30f; // тиков между ударами по целям
@@ -63,6 +71,8 @@ public class SolarStorm{
     public static final float EMP_THRESHOLD = 0.7f;
     public static final float EMP_COOLDOWN = 60f * 20f;
     public static final float EMP_UNIT_TIME = 60f * 5f;
+    /** Длительность эффектов radiationWeak/empLow, должна быть > DAMAGE_INTERVAL. */
+    public static final float EFFECT_DURATION = 60f;
 
     /** Текущие значения, можно читать из UI. */
     public static float exposure, intensity, passiveHeat;
@@ -77,8 +87,13 @@ public class SolarStorm{
     private static boolean stormActive;
 
 
+
     /** Вызывать при загрузке контента, после создания планет. */
     public static void load(){
+        if(!Core.settings.has(NOTIFICATIONS_SETTING)){
+            Core.settings.put(NOTIFICATIONS_SETTING, true);
+        }
+
         empStatus = new mindustry.type.StatusEffect("solar-emp"){{
             show = false;
             speedMultiplier = 0.6f;
@@ -115,11 +130,25 @@ public class SolarStorm{
 
         if(net.client()) return;
 
-        boolean active = intensity > 0.2f;
-        if(active != stormActive && !headless){
-            ui.showInfoToast(active ? "Повышение солнечной активности!" : "Снижение солнечной активности!", 4f);
+        if(Core.settings.getBool(NOTIFICATIONS_SETTING, true)){
+            float currentLevel = intensity < 0.2f ? 0f :
+                    intensity < 0.5f ? 0.2f :
+                            intensity < 0.7f ? 0.5f : 0.7f;
+
+            if(currentLevel != lastIntensityLevel && !headless){
+                if(currentLevel > lastIntensityLevel){
+                    String text = currentLevel < 0.5f ? "Слабая солнечная активность" :
+                            currentLevel < 0.7f ? "Умеренная солнечная активность" :
+                                    "Сильная солнечная активность!";
+                    Drawable icon = currentLevel < 0.5f ? Icon.up :
+                            currentLevel < 0.7f ? Icon.up : Icon.up;
+                    ui.hudfrag.showToast(icon, text);
+                }else{
+                    ui.hudfrag.showToast(Icon.down, "Снижение солнечной активности");
+                }
+                lastIntensityLevel = currentLevel;
+            }
         }
-        stormActive = active;
 
         damageTimer += Time.delta;
         if(damageTimer >= DAMAGE_INTERVAL){
@@ -161,8 +190,16 @@ public class SolarStorm{
         if(intensity >= 0.05f){
             float dps = Mathf.lerp(UNIT_DPS_MIN, UNIT_DPS_MAX, intensity);
             Groups.unit.each(u -> {
-                if(u.dead() || covered(u.team, u.x, u.y)) return;
+                if(u.dead() || shielded(u)) return;
+
                 u.damagePierce(dps * dt);
+
+                if(intensity >= 0.5f){
+                    u.apply(InfernoStatusEffects.empLow, EFFECT_DURATION);
+                    u.apply(InfernoStatusEffects.radiationWeak, EFFECT_DURATION);
+                }else if(intensity >= 0.2f){
+                    u.apply(InfernoStatusEffects.radiationWeak, EFFECT_DURATION);
+                }
             });
         }
 
@@ -195,7 +232,7 @@ public class SolarStorm{
 
         Groups.build.each(b -> {
             if(!(b.block instanceof PowerNode) || covered(b.team, b.x, b.y)) return;
-            b.control(LAccess.enabled, 0, 0, 0, 0); // выключается на время, потом включится сам
+            b.control(LAccess.enabled, 0, 0, 0, 0);
             Fx.shockwave.at(b.x, b.y);
         });
     }
@@ -218,5 +255,4 @@ public class SolarStorm{
     private static boolean shielded(Unit u){
         return u.shield() > 0f || covered(u.team, u.x, u.y);
     }
-
 }

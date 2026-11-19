@@ -39,7 +39,6 @@ public class InfernoStatusEffects {
             color = Color.valueOf("b8d9a0"); // TODO: подобрать под IAPal
             show = true;
 
-            damage = 0.2f;
             healthMultiplier = 0.95f;
 
             effectChance = 0.05f;

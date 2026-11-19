@@ -7,7 +7,7 @@ import static mindustry.Vars.mods;
 
 public class IAMeta {
     public static LoadedMod mod;
-    public static String name, displayName, version, author, subtitle, description, minGameVersion;
+    public static String name, displayName, version, author, subtitle, description, minGameVersion, createData;
 
     public static void load() {
         mod = mods.getMod(InfernoAdvancedMod.class);
@@ -18,6 +18,7 @@ public class IAMeta {
         subtitle = mod.meta.subtitle;
         description = mod.meta.description;
         minGameVersion = mod.meta.minGameVersion;
+        createData = "20.09.2025";
     }
 
     public static String versionString() {
