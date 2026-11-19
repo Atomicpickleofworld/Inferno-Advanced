@@ -293,9 +293,9 @@ public class InfernoStatusEffects {
 
                 empLow, empMedium, empHigh, empShock,
 
-                blindingWeak, blindingMedium, blindingStrong,
+//                blindingWeak, blindingMedium, blindingStrong,
 
-                servoPartial, servoFull,
+//                servoPartial, servoFull,
 
                 gravityCollapse, battleHunger
         }){
