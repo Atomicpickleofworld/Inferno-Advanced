@@ -1,0 +1,12 @@
+{
+  "displayName": "Inferno Advanced",
+  "name": "inferno-advanced",
+  "author": "[#FF5733]AtomicPickle",
+  "description": "A Mindustry Java mod.\n [red]ectgore thx for sounds",
+
+  "version": "5.5.2-alpha",
+
+  "main": "infernoadvanced.InfernoAdvancedMod",
+  "minGameVersion": 154,
+  "java": true
+}

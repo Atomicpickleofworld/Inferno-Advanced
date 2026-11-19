@@ -1,0 +1,11 @@
+.gradle/
+build/
+out/
+bin/
+.idea/
+.vscode/
+*.class
+*.zip
+raw-content/
+tools/
+src/infernoadvanced/content/IATestBlocks.java
