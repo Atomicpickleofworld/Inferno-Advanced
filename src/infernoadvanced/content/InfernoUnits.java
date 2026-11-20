@@ -10,11 +10,13 @@ import infernoadvanced.entities.units.RollUnitType;
 import infernoadvanced.entities.units.RollWeapon;
 import infernoadvanced.graphics.IAPal;
 import infernoadvanced.loaders.IASounds;
+import mindustry.ai.types.BuilderAI;
 import mindustry.ai.types.CommandAI;
 import mindustry.content.Blocks;
 import mindustry.content.Fx;
 import mindustry.content.StatusEffects;
 import mindustry.entities.abilities.ForceFieldAbility;
+import mindustry.entities.abilities.RepairFieldAbility;
 import mindustry.entities.abilities.ShieldArcAbility;
 import mindustry.entities.bullet.*;
 import mindustry.entities.part.DrawPart;
@@ -39,8 +41,11 @@ import static infernoadvanced.content.InfernoBullets.*;
 public class InfernoUnits {
 
     public static UnitType
-            //
-            wren, swift, hornet, falcon, raptor;
+
+            wren, swift, hornet, falcon, raptor,
+
+            iskra, ember, flame
+                    ;
 
     public static void load() {
 
@@ -577,6 +582,161 @@ public class InfernoUnits {
                     collidesGround = true;
                     status = StatusEffects.burning;
                     statusDuration = 60f;
+                }};
+            }});
+        }};
+
+        //core-units
+        iskra = new UnitType("iskra"){{
+            controller = u -> u.team.isAI() ? new BuilderAI(true, 400f) : new CommandAI();
+            isEnemy = false;
+            targetBuildingsMobile = false;
+            lowAltitude = true;
+            flying = true;
+            fogRadius = 0f;
+
+            immunities.add(StatusEffects.burning);
+
+            health = 170f;
+            buildSpeed = 0.5f;
+            mineSpeed = 6.5f;
+            mineTier = 1;
+            itemCapacity = 30;
+            speed = 3f;
+            rotateSpeed = 15f;
+            accel = 0.1f;
+            drag = 0.05f;
+            engineOffset = 6f;
+            hitSize = 8f;
+            wreckSoundVolume = 0.8f;
+            deathSoundVolume = 0.7f;
+
+            weapons.add(new Weapon(){{
+                y = 1f;
+                x = 0f;
+                shootCone = 10f;
+                reload = 80f;
+                shoot.shots = 3;
+                shoot.shotDelay = 3f;
+                ejectEffect = Fx.casing1;
+                mirror = false;
+                bullet = new BasicBulletType(2.5f, 9){{
+                    inaccuracy = 4f;
+                    width = 7f;
+                    height = 9f;
+                    lifetime = 32f;
+                    shootEffect = Fx.shootSmall;
+                    smokeEffect = Fx.shootSmallSmoke;
+                    ammoMultiplier = 2;
+                }};
+            }});
+        }};
+
+        ember = new UnitType("ember"){{
+            controller = u -> u.team.isAI() ? new BuilderAI(true, 400f) : new CommandAI();
+            isEnemy = false;
+            targetBuildingsMobile = false;
+            lowAltitude = true;
+            flying = true;
+            fogRadius = 0f;
+
+            immunities.add(StatusEffects.burning);
+
+            health = 200f;
+            buildSpeed = 0.8f;
+            // TODO: verify
+            mineSpeed = 7f;
+            mineTier = 1;
+            itemCapacity = 50;
+            // TODO: verify
+            speed = 3.3f;
+            rotateSpeed = 17f;
+            accel = 0.1f;
+            drag = 0.05f;
+            engineOffset = 6f;
+            hitSize = 9f;
+            wreckSoundVolume = 0.8f;
+            deathSoundVolume = 0.7f;
+
+            abilities.add(new ForceFieldAbility(13f, 0.15f, 100f, 60f * 8f));
+
+            weapons.add(
+                    new Weapon(){{
+                        top = false;
+                        reload = 24f;
+                        x = 3.5f;
+                        y = 1f;
+                        recoil = 1f;
+                        mirror = true;
+                        alternate = true;
+                        shootSound = Sounds.shootAlpha;
+                        bullet = new BasicBulletType(3f, 12){{
+                            scaleKeepVelocity = true;
+                            width = 1.5f;
+                            height = 5f;
+                            lifetime = 60f;
+                            buildingDamageMultiplier = 0f;
+                            homingPower = 0.03f;
+                            hitEffect = despawnEffect = Fx.hitBulletColor;
+                        }};
+                    }}
+            );
+        }};
+
+        flame = new UnitType("flame"){{
+            controller = u -> u.team.isAI() ? new BuilderAI(true, 400f) : new CommandAI();
+            isEnemy = false;
+            targetBuildingsMobile = false;
+            lowAltitude = true;
+            flying = true;
+            fogRadius = 0f;
+
+            immunities.add(StatusEffects.burning);
+
+            health = 270f;
+            buildSpeed = 1.2f;
+            mineSpeed = 8f;
+            mineTier = 2;
+            itemCapacity = 80;
+            speed = 3.55f;
+            rotateSpeed = 19f;
+            accel = 0.11f;
+            drag = 0.05f;
+            engineOffset = 6f;
+            hitSize = 11f;
+            wreckSoundVolume = 0.8f;
+            deathSoundVolume = 0.7f;
+
+            abilities.add(
+                    new ForceFieldAbility(16f, 0.2f, 320f, 60f * 8f),
+                    new RepairFieldAbility(){{
+                        amount = 6f;
+                        reload = 60f * 7f;
+                        range = 55f;
+                    }}
+            );
+
+            weapons.add(new Weapon(){{
+                x = y = 0f;
+                mirror = false;
+                reload = 55f;
+                shootSound = Sounds.shootMissileShort;
+                bullet = new MissileBulletType(3f, 18){{
+                    width = 8f;
+                    height = 8f;
+                    shrinkY = 0f;
+                    drag = -0.003f;
+                    homingRange = 60f;
+                    scaleKeepVelocity = true;
+                    keepVelocity = false;
+                    splashDamageRadius = 20f;
+                    splashDamage = 12f;
+                    lifetime = 50f;
+                    buildingDamageMultiplier = 0f;
+                    trailColor = Pal.unitBack;
+                    backColor = Pal.unitBack;
+                    frontColor = Color.white;
+                    hitEffect = despawnEffect = Fx.blastExplosion;
                 }};
             }});
         }};
