@@ -1,20 +1,15 @@
 package infernoadvanced.entities.bullet;
 
 import arc.math.Mathf;
-import arc.util.Time;
 import mindustry.content.Fx;
 import mindustry.content.StatusEffects;
 import mindustry.entities.Effect;
 import mindustry.entities.Units;
 import mindustry.entities.bullet.BasicBulletType;
-import mindustry.gen.Building;
-import mindustry.gen.Bullet;
-import mindustry.gen.Hitboxc;
-import mindustry.gen.Sounds;
-import mindustry.gen.Unit;
+import mindustry.gen.*;
 import mindustry.graphics.Pal;
 
-import static mindustry.Vars.*;
+import static mindustry.Vars.indexer;
 
 public class RicochetBulletType extends BasicBulletType {
 
@@ -58,7 +53,7 @@ public class RicochetBulletType extends BasicBulletType {
     @Override
     public void init(Bullet b) {
         super.init(b);
-        b.data = new int[]{maxBounces, (int)damage};
+        b.data = new int[]{maxBounces, (int) damage};
         b.damage = damage;
     }
 

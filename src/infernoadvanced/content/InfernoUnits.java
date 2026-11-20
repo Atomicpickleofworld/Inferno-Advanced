@@ -1,51 +1,43 @@
 package infernoadvanced.content;
 
 import arc.graphics.Color;
-import arc.math.Interp;
 import infernoadvanced.ai.types.AggressiveFighterAI;
 import infernoadvanced.entities.abilities.BarrelRollAbility;
 import infernoadvanced.entities.abilities.DashAbility;
 import infernoadvanced.entities.bullet.BlackHoleBulletType;
 import infernoadvanced.entities.units.RollUnitType;
 import infernoadvanced.entities.units.RollWeapon;
-import infernoadvanced.graphics.IAPal;
 import infernoadvanced.loaders.IASounds;
 import mindustry.ai.types.BuilderAI;
 import mindustry.ai.types.CommandAI;
-import mindustry.content.Blocks;
 import mindustry.content.Fx;
 import mindustry.content.StatusEffects;
 import mindustry.entities.abilities.ForceFieldAbility;
 import mindustry.entities.abilities.RepairFieldAbility;
 import mindustry.entities.abilities.ShieldArcAbility;
-import mindustry.entities.bullet.*;
-import mindustry.entities.part.DrawPart;
-import mindustry.entities.part.HaloPart;
-import mindustry.entities.part.ShapePart;
+import mindustry.entities.bullet.BasicBulletType;
+import mindustry.entities.bullet.BulletType;
+import mindustry.entities.bullet.FlakBulletType;
+import mindustry.entities.bullet.MissileBulletType;
 import mindustry.entities.pattern.ShootAlternate;
 import mindustry.entities.pattern.ShootPattern;
 import mindustry.gen.Sounds;
 import mindustry.gen.UnitEntity;
-import mindustry.graphics.Layer;
 import mindustry.graphics.Pal;
 import mindustry.type.UnitType;
 import mindustry.type.Weapon;
-import mindustry.type.unit.MissileUnitType;
-import mindustry.world.blocks.units.Reconstructor;
 import mindustry.world.meta.BlockFlag;
 
-import static arc.graphics.Gl.fastest;
-import static arc.graphics.Gl.none;
-import static infernoadvanced.content.InfernoBullets.*;
+import static infernoadvanced.content.InfernoBullets.falconMissle;
+import static infernoadvanced.content.InfernoBullets.hornetMissle;
 
 public class InfernoUnits {
 
     public static UnitType
 
-            wren, swift, hornet, falcon, raptor,
+    wren, swift, hornet, falcon, raptor,
 
-            iskra, ember, flame
-                    ;
+    iskra, ember, flame;
 
     public static void load() {
 
@@ -179,10 +171,10 @@ public class InfernoUnits {
                 shootSoundVolume = 0.1f;
 
                 int speedbylife = 2;
-                bullet = new BasicBulletType(12f*speedbylife, 7f) {{
+                bullet = new BasicBulletType(12f * speedbylife, 7f) {{
                     width = 1f;
                     height = 13f;
-                    lifetime = 15f/speedbylife;
+                    lifetime = 15f / speedbylife;
                     sprite = "casing";
                     shootSound = IASounds.shootSwift;
                     backColor = Pal.bulletYellowBack;
@@ -199,7 +191,7 @@ public class InfernoUnits {
             constructor = UnitEntity::create;
             flying = true;
             omniMovement = false;
-            faceTarget =  true;
+            faceTarget = true;
             circleTarget = true;
             targetFlags = new BlockFlag[]{null};
 
@@ -313,9 +305,9 @@ public class InfernoUnits {
             }});
 
             abilities.add(new ForceFieldAbility(35f, 0.5f, 1800f, 240f, 10, 45f) {
-            {
-                  this.breakSound = Sounds.shieldBreak;
-            }
+                {
+                    this.breakSound = Sounds.shieldBreak;
+                }
             });
 
             abilities.add(new ShieldArcAbility() {{
@@ -587,7 +579,7 @@ public class InfernoUnits {
         }};
 
         //core-units
-        iskra = new UnitType("iskra"){{
+        iskra = new UnitType("iskra") {{
             controller = u -> u.team.isAI() ? new BuilderAI(true, 400f) : new CommandAI();
             isEnemy = false;
             targetBuildingsMobile = false;
@@ -611,7 +603,7 @@ public class InfernoUnits {
             wreckSoundVolume = 0.8f;
             deathSoundVolume = 0.7f;
 
-            weapons.add(new Weapon(){{
+            weapons.add(new Weapon() {{
                 y = 1f;
                 x = 0f;
                 shootCone = 10f;
@@ -620,7 +612,7 @@ public class InfernoUnits {
                 shoot.shotDelay = 3f;
                 ejectEffect = Fx.casing1;
                 mirror = false;
-                bullet = new BasicBulletType(2.5f, 9){{
+                bullet = new BasicBulletType(2.5f, 9) {{
                     inaccuracy = 4f;
                     width = 7f;
                     height = 9f;
@@ -632,7 +624,7 @@ public class InfernoUnits {
             }});
         }};
 
-        ember = new UnitType("ember"){{
+        ember = new UnitType("ember") {{
             controller = u -> u.team.isAI() ? new BuilderAI(true, 400f) : new CommandAI();
             isEnemy = false;
             targetBuildingsMobile = false;
@@ -661,7 +653,7 @@ public class InfernoUnits {
             abilities.add(new ForceFieldAbility(13f, 0.15f, 100f, 60f * 8f));
 
             weapons.add(
-                    new Weapon(){{
+                    new Weapon() {{
                         top = false;
                         reload = 24f;
                         x = 3.5f;
@@ -670,8 +662,7 @@ public class InfernoUnits {
                         mirror = true;
                         alternate = true;
                         shootSound = Sounds.shootAlpha;
-                        bullet = new BasicBulletType(3f, 12){{
-                            scaleKeepVelocity = true;
+                        bullet = new BasicBulletType(3f, 12) {{
                             width = 1.5f;
                             height = 5f;
                             lifetime = 60f;
@@ -683,7 +674,7 @@ public class InfernoUnits {
             );
         }};
 
-        flame = new UnitType("flame"){{
+        flame = new UnitType("flame") {{
             controller = u -> u.team.isAI() ? new BuilderAI(true, 400f) : new CommandAI();
             isEnemy = false;
             targetBuildingsMobile = false;
@@ -709,19 +700,19 @@ public class InfernoUnits {
 
             abilities.add(
                     new ForceFieldAbility(16f, 0.2f, 320f, 60f * 8f),
-                    new RepairFieldAbility(){{
+                    new RepairFieldAbility() {{
                         amount = 6f;
                         reload = 60f * 7f;
                         range = 55f;
                     }}
             );
 
-            weapons.add(new Weapon(){{
+            weapons.add(new Weapon() {{
                 x = y = 0f;
                 mirror = false;
                 reload = 55f;
                 shootSound = Sounds.shootMissileShort;
-                bullet = new MissileBulletType(3f, 18){{
+                bullet = new MissileBulletType(3f, 18) {{
                     width = 8f;
                     height = 8f;
                     shrinkY = 0f;

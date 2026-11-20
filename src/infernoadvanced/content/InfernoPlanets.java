@@ -5,24 +5,19 @@ import arc.math.Rand;
 import arc.math.geom.Mat3D;
 import arc.math.geom.Vec3;
 import arc.struct.Seq;
-import infernoadvanced.content.planets.infernos.InfernosPlanet;
-import infernoadvanced.content.planets.infernos.InfernosPlanetGenerator;
 import infernoadvanced.content.planets.RingAsteroid;
 import infernoadvanced.content.planets.events.EruptionMesh;
 import infernoadvanced.content.planets.events.SolarActivity;
 import infernoadvanced.content.planets.events.SolarStorm;
+import infernoadvanced.content.planets.infernos.InfernosPlanet;
+import infernoadvanced.content.planets.infernos.InfernosPlanetGenerator;
 import mindustry.content.Planets;
-import mindustry.graphics.g3d.GenericMesh;
-import mindustry.graphics.g3d.HexSkyMesh;
-import mindustry.graphics.g3d.MatMesh;
-import mindustry.graphics.g3d.MultiMesh;
-import mindustry.graphics.g3d.NoiseMesh;
-import mindustry.graphics.g3d.SunMesh;
+import mindustry.graphics.g3d.*;
 import mindustry.type.Planet;
 import mindustry.world.meta.Attribute;
 import mindustry.world.meta.Env;
 
-public class InfernoPlanets{
+public class InfernoPlanets {
     public static Planet infernoStar, infernos;
     public static Planet[] asteroids;
 
@@ -37,26 +32,26 @@ public class InfernoPlanets{
     private static final float RING_RADIUS = 1.05f, RING_TILT = 27f, RING_PERIOD = 60f * 16f;
 
     private static final Color
-            STAR_CORE  = Color.valueOf("ff4a1f"),
-            STAR_MID   = Color.valueOf("ff6b3d"),
-            STAR_EDGE  = Color.valueOf("ffa070"),
+            STAR_CORE = Color.valueOf("ff4a1f"),
+            STAR_MID = Color.valueOf("ff6b3d"),
+            STAR_EDGE = Color.valueOf("ffa070"),
             STAR_LIGHT = Color.valueOf("ff6b4d"),
-            ROCK_DARK  = Color.valueOf("2a1f1a"),
+            ROCK_DARK = Color.valueOf("2a1f1a"),
             ROCK_LIGHT = Color.valueOf("5a4a3a");
 
-        public static void load(){
-            loadStar();
-            loadInfernos();
-            loadRing();
-            SolarStorm.load();
-    //        Log.info("[IA] planets: star=@ infernos=@ ring=@", infernoStar, infernos, asteroids.length);
-    //        Events.on(EventType.ClientLoadEvent.class, e -> Vars.content.planets().each(p ->
-    //                Log.info("[IA] planet @ accessible=@ system=@", p.name, p.accessible, p.solarSystem)));
-            InfernoTestContent.assignPlanet(infernos);
-        }
+    public static void load() {
+        loadStar();
+        loadInfernos();
+        loadRing();
+        SolarStorm.load();
+        //        Log.info("[IA] planets: star=@ infernos=@ ring=@", infernoStar, infernos, asteroids.length);
+        //        Events.on(EventType.ClientLoadEvent.class, e -> Vars.content.planets().each(p ->
+        //                Log.info("[IA] planet @ accessible=@ system=@", p.name, p.accessible, p.solarSystem)));
+        InfernoTestContent.assignPlanet(infernos);
+    }
 
-    private static void loadStar(){
-        infernoStar = new Planet("inferno-star", SEPARATE_SYSTEM ? null : Planets.sun, 2.8f){{
+    private static void loadStar() {
+        infernoStar = new Planet("inferno-star", SEPARATE_SYSTEM ? null : Planets.sun, 2.8f) {{
             localizedName = "Vesper";
             description = "Красный карлик класса M. Его слабый свет окрашивает систему в багровые тона.";
 
@@ -69,7 +64,7 @@ public class InfernoPlanets{
             rotateTime = 60f * 60f * 8f;
             clipRadius = SolarActivity.REACH + 0.5f;
 
-            if(!SEPARATE_SYSTEM){
+            if (!SEPARATE_SYSTEM) {
                 orbitRadius = 45f;
                 orbitTime = 60f * 60f * 40f;
                 drawOrbit = false;
@@ -94,8 +89,8 @@ public class InfernoPlanets{
         }};
     }
 
-    private static void loadInfernos(){
-        infernos = new InfernosPlanet("infernos", infernoStar, 0.45f, SECTOR_DETAIL){{
+    private static void loadInfernos() {
+        infernos = new InfernosPlanet("infernos", infernoStar, 0.45f, SECTOR_DETAIL) {{
             localizedName = "Infernos";
             description = "Горячая малая планета у самой звезды: базальтовые пики над огненными равнинами, " +
                     "реки лавы и плотный дым, почти не пропускающий свет.";
@@ -117,16 +112,16 @@ public class InfernoPlanets{
             updateLighting = true;
             bloom = false;
 
-            generator = new InfernosPlanetGenerator(){{
+            generator = new InfernosPlanetGenerator() {{
                 defaultLoadout = InfernoTestContent.loadout();
             }};
             defaultCore = InfernoTestContent.testCore;
             unlockedOnLand.add(InfernoTestContent.testCore);
 
             hasAtmosphere = true;
-            atmosphereRadIn = ((InfernosPlanet)this).haloRadIn;
-            atmosphereRadOut = ((InfernosPlanet)this).haloRadOut;
-            atmosphereColor = ((InfernosPlanet)this).haloColor;
+            atmosphereRadIn = ((InfernosPlanet) this).haloRadIn;
+            atmosphereRadOut = ((InfernosPlanet) this).haloRadOut;
+            atmosphereColor = ((InfernosPlanet) this).haloColor;
             iconColor = Color.valueOf("ff3300");
             landCloudColor = Color.valueOf("5a2a1a").a(0.5f);
 
@@ -165,19 +160,19 @@ public class InfernoPlanets{
         }};
     }
 
-    private static void loadRing(){
+    private static void loadRing() {
         asteroids = new Planet[RING_COUNT];
         Rand rand = new Rand(RING_SEED);
 
-        for(int i = 0; i < RING_COUNT; i++){
-            int seed = (int)(RING_SEED + i * 137L);
+        for (int i = 0; i < RING_COUNT; i++) {
+            int seed = (int) (RING_SEED + i * 137L);
             float size = rand.random(0.02f, 0.05f);
             float orbit = RING_RADIUS + rand.random(-0.07f, 0.07f);
             float tilt = RING_TILT + rand.random(-1.6f, 1.6f);
             float offset = 360f / RING_COUNT * i + rand.random(-2.5f, 2.5f);
             float spin = 60f * rand.random(6f, 20f);
 
-            asteroids[i] = new RingAsteroid("infernos-ring-" + i, infernos, size, tilt){{
+            asteroids[i] = new RingAsteroid("infernos-ring-" + i, infernos, size, tilt) {{
                 localizedName = "Обломок Infernos";
                 orbitRadius = orbit;
                 orbitTime = RING_PERIOD;
@@ -189,7 +184,7 @@ public class InfernoPlanets{
         }
     }
 
-    private static GenericMesh rockMesh(Planet planet, int seed, float radius){
+    private static GenericMesh rockMesh(Planet planet, int seed, float radius) {
         Rand rand = new Rand(seed);
         Seq<GenericMesh> meshes = new Seq<>();
 
@@ -198,7 +193,7 @@ public class InfernoPlanets{
                 ROCK_DARK, ROCK_LIGHT, 3, 0.6f, 0.38f, rand.random(0.4f, 0.6f)));
 
         int pieces = rand.random(0, 2);
-        for(int j = 0; j < pieces; j++){
+        for (int j = 0; j < pieces; j++) {
             meshes.add(new MatMesh(
                     new NoiseMesh(planet, seed + j + 1, 1, radius * rand.random(0.25f, 0.5f),
                             2, 0.6f, 0.38f, rand.random(12f, 20f),
@@ -213,7 +208,7 @@ public class InfernoPlanets{
     private static NoiseMesh layer(Planet planet, int seed, int divisions, float radius,
                                    int octaves, float persistence, float scale, float relief,
                                    String color1, String color2,
-                                   int colorOct, float colorPersistence, float colorScale, float colorThreshold){
+                                   int colorOct, float colorPersistence, float colorScale, float colorThreshold) {
         return new NoiseMesh(planet, seed, divisions, radius,
                 octaves, persistence, scale, relief,
                 Color.valueOf(color1), Color.valueOf(color2),

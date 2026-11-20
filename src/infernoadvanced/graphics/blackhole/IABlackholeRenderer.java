@@ -1,16 +1,19 @@
 package infernoadvanced.graphics.blackhole;
 
-import arc.*;
-import arc.graphics.*;
-import arc.graphics.g2d.*;
-import arc.graphics.gl.*;
-import arc.struct.*;
+import arc.Core;
+import arc.Events;
+import arc.graphics.Color;
+import arc.graphics.g2d.Draw;
+import arc.graphics.g2d.Fill;
+import arc.graphics.gl.FrameBuffer;
+import arc.struct.Seq;
 import arc.util.Tmp;
 import arc.util.pooling.Pool;
 import arc.util.pooling.Pools;
 import mindustry.Vars;
-import mindustry.game.EventType.*;
-import mindustry.graphics.*;
+import mindustry.game.EventType.ResizeEvent;
+import mindustry.game.EventType.Trigger;
+import mindustry.graphics.Layer;
 
 public class IABlackholeRenderer {
     private final Seq<BlackHole> holes = new Seq<>();

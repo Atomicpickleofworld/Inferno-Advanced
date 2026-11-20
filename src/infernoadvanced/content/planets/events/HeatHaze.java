@@ -5,9 +5,9 @@ import arc.graphics.gl.Shader;
 import arc.util.Log;
 import arc.util.Time;
 
-import static mindustry.Vars.*;
+import static mindustry.Vars.headless;
 
-public class HeatHaze{
+public class HeatHaze {
     public static float intensity;
 
     private static final String VERT = String.join("\n",
@@ -40,18 +40,18 @@ public class HeatHaze{
     private static Shader shader;
     private static boolean failed;
 
-    public static Shader get(){
-        if(shader == null && !failed && !headless){
-            try{
-                shader = new Shader(VERT, FRAG){
+    public static Shader get() {
+        if (shader == null && !failed && !headless) {
+            try {
+                shader = new Shader(VERT, FRAG) {
                     @Override
-                    public void apply(){
+                    public void apply() {
                         setUniformf("u_time", Time.globalTime / 60f);
                         setUniformf("u_intensity", intensity);
                         setUniformf("u_resolution", Core.graphics.getWidth(), Core.graphics.getHeight());
                     }
                 };
-            }catch(Throwable t){
+            } catch (Throwable t) {
                 failed = true;
                 Log.err("HeatHaze shader failed", t);
             }

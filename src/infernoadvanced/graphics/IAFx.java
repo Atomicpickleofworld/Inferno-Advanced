@@ -1,12 +1,21 @@
 package infernoadvanced.graphics;
 
-import arc.graphics.*;
-import arc.graphics.g2d.*;
-import arc.math.*;
+import arc.graphics.Blending;
+import arc.graphics.Color;
+import arc.graphics.g2d.Draw;
+import arc.graphics.g2d.Fill;
+import arc.graphics.g2d.Lines;
+import arc.math.Angles;
+import arc.math.Interp;
+import arc.math.Mathf;
+import arc.math.Rand;
 import arc.math.geom.Vec2;
-import arc.util.*;
+import arc.util.Nullable;
+import arc.util.Tmp;
 import mindustry.entities.Effect;
-import mindustry.graphics.*;
+import mindustry.graphics.Drawf;
+import mindustry.graphics.Layer;
+import mindustry.graphics.Pal;
 
 import static arc.graphics.g2d.Draw.*;
 import static arc.graphics.g2d.Lines.stroke;
@@ -34,34 +43,34 @@ public class IAFx {
          * @param cone       полуугол конуса разброса частиц, в градусах
          * @param distance   дальность (длина) шлейфа дыма
          */
-        public static Effect shootSmokeMissileBack(float backOffset, float cone, float distance){
+        public static Effect shootSmokeMissileBack(float backOffset, float cone, float distance) {
             return shootSmokeMissileBack(backOffset, cone, distance, Pal.redLight, null, 0.5f);
         }
 
-        public static Effect shootSmokeMissileBack(float backOffset, float cone, float distance, Color from, @Nullable Color to, float smokeAlpha){
+        public static Effect shootSmokeMissileBack(float backOffset, float cone, float distance, Color from, @Nullable Color to, float smokeAlpha) {
             return missileSmoke(backOffset, cone, distance, 9f, from, to, smokeAlpha).baseRotation(180f);
         }
 
-        public static Effect shootSmokeMissileFront(Color from, @Nullable Color to, float smokeAlpha){
+        public static Effect shootSmokeMissileFront(Color from, @Nullable Color to, float smokeAlpha) {
             return missileSmoke(0f, 21f, 90f, 9f, from, to, smokeAlpha);
         }
 
-        public static Effect shootSmokeMissileFront(Color smokeColor, float smokeAlpha){
+        public static Effect shootSmokeMissileFront(Color smokeColor, float smokeAlpha) {
             return shootSmokeMissileFront(smokeColor, null, smokeAlpha);
         }
 
-        public static Effect shootSmokeMissileFront(float smokeAlpha){
+        public static Effect shootSmokeMissileFront(float smokeAlpha) {
             return shootSmokeMissileFront(Pal.redLight, null, smokeAlpha);
         }
 
-        private static Effect missileSmoke(float offset, float cone, float distance, float size, Color from, @Nullable Color to, float smokeAlpha){
+        private static Effect missileSmoke(float offset, float cone, float distance, float size, Color from, @Nullable Color to, float smokeAlpha) {
             float lifetime = distance * 1.44f;
             float clip = (offset + distance + size) * 2f;
-            int particles = Math.max(6, (int)(distance * 0.4f));
+            int particles = Math.max(6, (int) (distance * 0.4f));
 
             return new Effect(lifetime, clip, e -> {
                 rand.setSeed(e.id);
-                if(to == null) color(from);
+                if (to == null) color(from);
 
                 float ox = Angles.trnsx(e.rotation, offset), oy = Angles.trnsy(e.rotation, offset);
 
@@ -70,7 +79,7 @@ public class IAFx {
                     float scl = rand.random(0.6f, 1f);
 
                     e.scaled(life, b -> {
-                        if(to != null) color(from, to, b.fin());
+                        if (to != null) color(from, to, b.fin());
                         alpha(smokeAlpha * b.fslope());
                         Fill.circle(e.x + x + ox, e.y + y + oy, b.fout() * size * scl + 0.3f);
                     });
@@ -134,8 +143,8 @@ public class IAFx {
     // ==========================================
     public static class Turrets {
 
-        public static final Effect shootSmokeHail = Generators.shootSmokeMissileBack(35f, 21f, 90f, Color.blue, Color.green,  0.5f);
-        public static final Effect shootSmokeDownpour = Generators.shootSmokeMissileBack(30f, 18f, 50f, Color.blue, Color.green,  0.5f);
+        public static final Effect shootSmokeHail = Generators.shootSmokeMissileBack(35f, 21f, 90f, Color.blue, Color.green, 0.5f);
+        public static final Effect shootSmokeDownpour = Generators.shootSmokeMissileBack(30f, 18f, 50f, Color.blue, Color.green, 0.5f);
 
         public static final Effect barium137mLaserCharge = new Effect(80f, 210f, e -> {
             color(IAPal.barium137mAmmoFront);
@@ -164,7 +173,7 @@ public class IAFx {
                 color(IAPal.blackHoleArc, IAPal.blackHoleGlow, phase1);
                 stroke(3f * (1f - phase1));
                 rand.setSeed(e.id);
-                for(int i = 0; i < 12; i++){
+                for (int i = 0; i < 12; i++) {
                     float angle = rand.random(360f);
                     float len = 100f * (1f - phase1) + 20f;
                     float cx = e.x + Angles.trnsx(angle, len * phase1);
@@ -197,7 +206,7 @@ public class IAFx {
 
                 color(IAPal.blackHoleArc);
                 rand.setSeed(e.id);
-                for(int i = 0; i < 16; i++){
+                for (int i = 0; i < 16; i++) {
                     float angle = rand.random(360f);
                     float len = 100f * collapse;
                     float px = e.x + Angles.trnsx(angle, len);
@@ -218,7 +227,7 @@ public class IAFx {
 
                 rand.setSeed(e.id + 1);
                 stroke(2f * (1f - phase2));
-                for(int i = 0; i < 8; i++){
+                for (int i = 0; i < 8; i++) {
                     float angle = rand.random(360f);
                     float len = 60f * Interp.pow2Out.apply(phase2);
                     Lines.lineAngle(e.x, e.y, angle, len);
@@ -322,7 +331,7 @@ public class IAFx {
             float radius = 14f;
 
             color(IAPal.blackHoleArc);
-            for(int i = 0; i < 1; i++){
+            for (int i = 0; i < 1; i++) {
                 float angle = e.rotation + i * 120f + Mathf.randomSeedRange(e.id + i, 20f);
                 float startR = radius * (0.6f + 0.4f * Mathf.randomSeed(e.id + i));
                 float r = startR * (1f - e.finpow());
@@ -340,7 +349,7 @@ public class IAFx {
         });
     }
 
-    public static class Radiation{
+    public static class Radiation {
         private static final Color[] strongColors = {
                 Color.valueOf("3a3a3a"),
                 Color.valueOf("c82020"),
@@ -363,7 +372,7 @@ public class IAFx {
                     });
 
                     Draw.blend(Blending.additive);
-                    for(int i = 0; i < 4; i++){
+                    for (int i = 0; i < 4; i++) {
                         float angle = Mathf.randomSeed(e.id + i, 360f);
                         float dist = Mathf.randomSeed(e.id + i + 100, 4f, 14f) * e.finpow();
                         Tmp.v1.trns(angle, dist);

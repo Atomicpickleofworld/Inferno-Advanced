@@ -6,7 +6,7 @@ import arc.graphics.g3d.Camera3D;
 import mindustry.graphics.g3d.MeshBuilder;
 import mindustry.type.Planet;
 
-public class InfernosPlanet extends Planet{
+public class InfernosPlanet extends Planet {
     public float haloRadIn = 0.02f, haloRadOut = 0.2f;
     public Color haloColor = Color.valueOf("ff4d1a");
     public float rimRadIn = 0.005f, rimRadOut = 0.05f;
@@ -14,13 +14,13 @@ public class InfernosPlanet extends Planet{
 
     private Mesh atmoProxy;
 
-    public InfernosPlanet(String name, Planet parent, float radius, int sectorSize){
+    public InfernosPlanet(String name, Planet parent, float radius, int sectorSize) {
         super(name, parent, radius, sectorSize);
     }
 
     @Override
-    public void drawAtmosphere(Mesh atmosphere, Camera3D cam){
-        if(atmoProxy == null){
+    public void drawAtmosphere(Mesh atmosphere, Camera3D cam) {
+        if (atmoProxy == null) {
             atmoProxy = MeshBuilder.buildHex(Color.white, 2, radius + Math.max(haloRadOut, rimRadOut) + 0.04f);
         }
 
@@ -43,9 +43,9 @@ public class InfernosPlanet extends Planet{
     }
 
     @Override
-    public void removeContent(){
+    public void removeContent() {
         super.removeContent();
-        if(atmoProxy != null){
+        if (atmoProxy != null) {
             atmoProxy.dispose();
             atmoProxy = null;
         }

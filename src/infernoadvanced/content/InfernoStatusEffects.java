@@ -1,23 +1,12 @@
 package infernoadvanced.content;
 
-import arc.graphics.Blending;
 import arc.graphics.Color;
-import arc.graphics.g2d.Draw;
-import arc.graphics.g2d.Fill;
-import arc.graphics.g2d.Lines;
-import arc.math.Angles;
-import arc.math.Mathf;
-import arc.util.Tmp;
 import infernoadvanced.entities.status.TieredStatusEffect;
 import infernoadvanced.graphics.IAFx;
 import infernoadvanced.graphics.IAPal;
 import mindustry.content.Fx;
 import mindustry.content.StatusEffects;
 import mindustry.content.TechTree;
-import mindustry.entities.Effect;
-import mindustry.entities.effect.MultiEffect;
-import mindustry.graphics.Drawf;
-import mindustry.graphics.Layer;
 import mindustry.graphics.Pal;
 import mindustry.type.ItemStack;
 import mindustry.type.StatusEffect;
@@ -34,8 +23,7 @@ public class InfernoStatusEffects {
 
     servoPartial, servoFull,
 
-    gravityCollapse, battleHunger
-    ;
+    gravityCollapse, battleHunger;
 
     public static void load() {
 
@@ -129,7 +117,7 @@ public class InfernoStatusEffects {
             alwaysUnlocked = true;
         }};
 
-        empLow    = new TieredStatusEffect("emp-low",    "emp", 1) {{
+        empLow = new TieredStatusEffect("emp-low", "emp", 1) {{
             color = IAPal.empLow;
 
             speedMultiplier = 0.75f;
@@ -187,7 +175,7 @@ public class InfernoStatusEffects {
             alwaysUnlocked = true;
         }};
 
-        empHigh   = new TieredStatusEffect("emp-high",   "emp", 3) {{
+        empHigh = new TieredStatusEffect("emp-high", "emp", 3) {{
             color = IAPal.empHigh;
 
             speedMultiplier = 0.25f;
@@ -218,7 +206,7 @@ public class InfernoStatusEffects {
             alwaysUnlocked = true;
         }};
 
-        empShock   = new TieredStatusEffect("emp-shock",   "emp", 4) {{
+        empShock = new TieredStatusEffect("emp-shock", "emp", 4) {{
             color = IAPal.empHigh;
 
             disarm = true;
@@ -282,12 +270,8 @@ public class InfernoStatusEffects {
         }};
 
 
-
-
-
-
 //sync with initialization
-        for(StatusEffect s : new StatusEffect[]{
+        for (StatusEffect s : new StatusEffect[]{
 
                 radiationWeak, radiationMedium, radiationStrong,
 
@@ -298,7 +282,7 @@ public class InfernoStatusEffects {
 //                servoPartial, servoFull,
 
                 gravityCollapse, battleHunger
-        }){
+        }) {
             s.allDatabaseTabs = true;
         }
     }

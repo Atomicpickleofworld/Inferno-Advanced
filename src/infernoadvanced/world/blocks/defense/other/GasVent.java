@@ -1,8 +1,6 @@
 package infernoadvanced.world.blocks.defense.other;
 
 import arc.graphics.Color;
-import arc.graphics.g2d.Draw;
-import arc.graphics.g2d.Fill;
 import arc.math.Mathf;
 import arc.struct.Seq;
 import arc.util.Strings;
@@ -130,7 +128,7 @@ public class GasVent extends Block {
 
             if (liquids.get(ventLiquid) <= 0.001f) return;
 
-            int tr = (int)(extinguishRadius / tilesize);
+            int tr = (int) (extinguishRadius / tilesize);
             int tx = tileX();
             int ty = tileY();
             float r2 = extinguishRadius * extinguishRadius;

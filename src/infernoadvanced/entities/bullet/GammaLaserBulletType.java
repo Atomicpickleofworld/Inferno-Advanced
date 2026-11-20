@@ -1,11 +1,16 @@
 package infernoadvanced.entities.bullet;
 
-import arc.graphics.*;
-import arc.graphics.g2d.*;
-import arc.math.*;
+import arc.graphics.Blending;
+import arc.graphics.Color;
+import arc.graphics.g2d.Draw;
+import arc.graphics.g2d.Fill;
+import arc.graphics.g2d.Lines;
+import arc.math.Angles;
+import arc.math.Mathf;
+import arc.math.Rand;
 import arc.util.Time;
-import mindustry.entities.bullet.*;
-import mindustry.gen.*;
+import mindustry.entities.bullet.LaserBulletType;
+import mindustry.gen.Bullet;
 import mindustry.graphics.Drawf;
 
 public class GammaLaserBulletType extends LaserBulletType {

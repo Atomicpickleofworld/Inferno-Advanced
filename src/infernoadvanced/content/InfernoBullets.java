@@ -3,7 +3,6 @@ package infernoadvanced.content;
 import arc.graphics.Color;
 import arc.graphics.g2d.Draw;
 import arc.graphics.g2d.Lines;
-
 import infernoadvanced.graphics.IAFx;
 import infernoadvanced.graphics.IAPal;
 import mindustry.content.Fx;
@@ -35,9 +34,7 @@ public class InfernoBullets {
     vanillaRippleBarium133,
     vanillaSwarmerCesium137,
 
-    hornetMissle, falconMissle
-
-    ;
+    hornetMissle, falconMissle;
 
     public static void load() {
         //region Archimedes Frags
@@ -496,7 +493,8 @@ public class InfernoBullets {
 
         //region Vanilla Integration
         vanillaDuoRefractoryBronze = new BasicBulletType(3f, 14) {{
-            width = 7f; height = 10f;
+            width = 7f;
+            height = 10f;
             lifetime = 60f;
             ammoMultiplier = 2;
 //            hitColor = backColor = trailColor = Color.valueOf("#b57b4a");
@@ -505,7 +503,8 @@ public class InfernoBullets {
         }};
 
         vanillaSalvoRefractoryBronze = new BasicBulletType(4f, 26) {{
-            width = 9f; height = 12f;
+            width = 9f;
+            height = 12f;
             lifetime = 45f;
             ammoMultiplier = 4;
 //            hitColor = backColor = trailColor = Color.valueOf("#b57b4a");
@@ -514,7 +513,8 @@ public class InfernoBullets {
         }};
 
         vanillaSalvoBarium133 = new BasicBulletType(4.5f, 32) {{
-            width = 9f; height = 12f;
+            width = 9f;
+            height = 12f;
             lifetime = 45f;
             ammoMultiplier = 3;
             hitColor = backColor = trailColor = IAPal.barium133AmmoBack;
@@ -539,7 +539,8 @@ public class InfernoBullets {
             hitEffect = Fx.flakExplosion;
             knockback = 1f;
             lifetime = 80f;
-            width = 12f; height = 14f;
+            width = 12f;
+            height = 14f;
             splashDamageRadius = 35f;
             splashDamage = 45f;
             hitColor = backColor = trailColor = IAPal.barium133AmmoBack;
@@ -549,7 +550,8 @@ public class InfernoBullets {
         }};
 
         vanillaSwarmerCesium137 = new MissileBulletType(3.7f, 11) {{
-            width = 8f; height = 12f;
+            width = 8f;
+            height = 12f;
             hitSize = 6f;
             lifetime = 55f;
             ammoMultiplier = 4;

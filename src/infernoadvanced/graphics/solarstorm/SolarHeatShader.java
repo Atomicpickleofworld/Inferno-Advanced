@@ -6,9 +6,9 @@ import arc.util.Log;
 import arc.util.Time;
 import infernoadvanced.content.planets.events.SolarStorm;
 
-import static mindustry.Vars.*;
+import static mindustry.Vars.headless;
 
-public class SolarHeatShader{
+public class SolarHeatShader {
     public static float amplitude = 0.0035f;
 
     private static final String VERT = String.join("\n",
@@ -43,16 +43,16 @@ public class SolarHeatShader{
     private static Shader shader;
     private static boolean failed;
 
-    public static void load(){
+    public static void load() {
         IAScreenFX.add(get(), () -> SolarStorm.intensity > 0.02f);
     }
 
-    public static Shader get(){
-        if(shader == null && !failed && !headless){
-            try{
-                shader = new Shader(VERT, FRAG.replace("AMPL", String.valueOf(amplitude))){
+    public static Shader get() {
+        if (shader == null && !failed && !headless) {
+            try {
+                shader = new Shader(VERT, FRAG.replace("AMPL", String.valueOf(amplitude))) {
                     @Override
-                    public void apply(){
+                    public void apply() {
                         setUniformf("u_campos",
                                 Core.camera.position.x - Core.camera.width / 2f,
                                 Core.camera.position.y - Core.camera.height / 2f);
@@ -61,7 +61,7 @@ public class SolarHeatShader{
                         setUniformf("u_heat", SolarStorm.intensity);
                     }
                 };
-            }catch(Throwable t){
+            } catch (Throwable t) {
                 failed = true;
                 Log.err("SolarHeatShader failed", t);
             }

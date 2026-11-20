@@ -10,24 +10,40 @@ import arc.math.geom.Vec3;
  * находится сразу много выбросов и звезда покрыта ими целиком.
  */
 
-public class SolarActivity{
-    /** Сколько выбросов идёт одновременно (в шейдере столько же ячеек массива). */
+public class SolarActivity {
+    /**
+     * Сколько выбросов идёт одновременно (в шейдере столько же ячеек массива).
+     */
     public static final int WAVES = 28;
-    /** Длительность одного выброса, секунды. */
+    /**
+     * Длительность одного выброса, секунды.
+     */
     public static final float PERIOD = 14f;
-    /** Максимальная высота выброса от центра звезды. */
+    /**
+     * Максимальная высота выброса от центра звезды.
+     */
     public static final float REACH = 4.6f;
 
-    /** Насколько выброс смещается от своей точки сетки при каждом новом извержении. */
+    /**
+     * Насколько выброс смещается от своей точки сетки при каждом новом извержении.
+     */
     private static final float JITTER = 0.45f;
-    /** Диапазон резкости конуса: больше значение, уже и острее выброс. */
+    /**
+     * Диапазон резкости конуса: больше значение, уже и острее выброс.
+     */
     private static final float SHARP_MIN = 14f, SHARP_MAX = 70f;
-    /** Диапазон высоты выброса в долях REACH. */
+    /**
+     * Диапазон высоты выброса в долях REACH.
+     */
     private static final float HEIGHT_MIN = 0.35f, HEIGHT_MAX = 1f;
 
-    /** Интервал между геймплейными штормами (секунды вселенной). */
+    /**
+     * Интервал между геймплейными штормами (секунды вселенной).
+     */
     private static final float STORM_INTERVAL_MIN = 300f, STORM_INTERVAL_MAX = 1800f;
-    /** Длительность геймплейного шторма. */
+    /**
+     * Длительность геймплейного шторма.
+     */
     private static final float STORM_DURATION_MIN = 240f, STORM_DURATION_MAX = 2100f;
 
     private static final long SEED = 6661301L;
@@ -43,16 +59,16 @@ public class SolarActivity{
      * shapes: WAVES * 4, на каждый выброс x = резкость конуса, y = высота в долях REACH
      */
 
-    public static void fill(float seconds, float[] waves, float[] shapes){
-        for(int i = 0; i < WAVES; i++){
+    public static void fill(float seconds, float[] waves, float[] shapes) {
+        for (int i = 0; i < WAVES; i++) {
             float t = seconds / PERIOD + i * GOLDEN;
-            int eruption = (int)Math.floor(t);
+            int eruption = (int) Math.floor(t);
             float phase = t - eruption;
 
             rand.setSeed(SEED + eruption * 31L + i * 7L);
 
             float y = 1f - (i + 0.5f) * 2f / WAVES;
-            float r = (float)Math.sqrt(Math.max(0f, 1f - y * y));
+            float r = (float) Math.sqrt(Math.max(0f, 1f - y * y));
             float a = i * GOLDEN_ANGLE;
             dir.set(Mathf.cos(a) * r, y, Mathf.sin(a) * r);
 
@@ -76,11 +92,11 @@ public class SolarActivity{
      * Геймплейная интенсивность шторма 0..1 (для SolarStorm).
      * Детерминированная от сида, зависит только от universeSeconds.
      */
-    public static float getStormIntensity(float universeSeconds){
+    public static float getStormIntensity(float universeSeconds) {
         float cycleTime = 0f;
         int cycleIndex = 0;
 
-        while(cycleTime <= universeSeconds){
+        while (cycleTime <= universeSeconds) {
             rand.setSeed(SEED + cycleIndex * 17L);
             float interval = rand.random(STORM_INTERVAL_MIN, STORM_INTERVAL_MAX);
             float duration = rand.random(STORM_DURATION_MIN, STORM_DURATION_MAX);
@@ -88,11 +104,11 @@ public class SolarActivity{
             float stormStart = cycleTime + interval;
             float stormEnd = stormStart + duration;
 
-            if(universeSeconds >= stormStart && universeSeconds < stormEnd){
+            if (universeSeconds >= stormStart && universeSeconds < stormEnd) {
                 float progress = (universeSeconds - stormStart) / duration;
 
-                if(progress < 0.15f) return progress / 0.15f;
-                if(progress > 0.85f) return (1f - progress) / 0.15f;
+                if (progress < 0.15f) return progress / 0.15f;
+                if (progress > 0.85f) return (1f - progress) / 0.15f;
                 return 1f;
             }
 

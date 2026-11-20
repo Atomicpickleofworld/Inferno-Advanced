@@ -1,9 +1,7 @@
 package infernoadvanced.content;
 
 import arc.struct.Seq;
-import arc.util.Log;
 import mindustry.content.Blocks;
-import mindustry.content.Items;
 import mindustry.content.SectorPresets;
 import mindustry.content.TechTree;
 import mindustry.ctype.UnlockableContent;
@@ -38,11 +36,13 @@ public class InfernoTechTree {
             node(InfernoBlocks.clusterMine, () ->
                     node(InfernoBlocks.blastMine,
                             Seq.with(new Objectives.SectorComplete(SectorPresets.stainedMountains)),
-                            () -> {}));
+                            () -> {
+                            }));
             node(InfernoBlocks.tripwireMine, () ->
                     node(InfernoBlocks.stormMine,
                             Seq.with(new Objectives.SectorComplete(SectorPresets.nuclearComplex)),
-                            () -> {}));
+                            () -> {
+                            }));
         });
 
         addToNode(Blocks.scatter, () -> {
@@ -52,7 +52,8 @@ public class InfernoTechTree {
                         () -> {
                             node(InfernoBlocks.MLRShail,
                                     Seq.with(new Objectives.SectorComplete(SectorPresets.nuclearComplex)),
-                                    () -> {});
+                                    () -> {
+                                    });
                         });
             });
         });
@@ -60,16 +61,17 @@ public class InfernoTechTree {
         addToNode(Blocks.fuse, () -> {
             node(InfernoBlocks.sievert,
                     Seq.with(new Objectives.SectorComplete(SectorPresets.nuclearComplex)),
-                    () -> {});
+                    () -> {
+                    });
         });
 
         addToNode(Blocks.parallax, () -> {
             node(InfernoBlocks.impulse,
                     Seq.with(new Objectives.SectorComplete(SectorPresets.stainedMountains)),
-                    () -> {});
+                    () -> {
+                    });
         });
     }
-
 
 
     public static void addToNode(UnlockableContent p, Runnable c) {
@@ -106,6 +108,7 @@ public class InfernoTechTree {
     }
 
     public static void node(UnlockableContent block) {
-        node(block, () -> {});
+        node(block, () -> {
+        });
     }
 }

@@ -4,12 +4,12 @@ import arc.graphics.Color;
 import arc.util.Log;
 import mindustry.game.Team;
 
-public class InfernoTeams{
+public class InfernoTeams {
     public static final int CINIS_ID = 20;
 
     public static Team cinis;
 
-    public static void load(){
+    public static void load() {
         cinis = Team.get(CINIS_ID);
         cinis.name = "cinis";
         cinis.setPalette(

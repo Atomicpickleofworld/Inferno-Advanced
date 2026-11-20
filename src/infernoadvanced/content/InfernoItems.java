@@ -1,10 +1,7 @@
 package infernoadvanced.content;
 
-import arc.graphics.Color;
 import infernoadvanced.graphics.IAPal;
-import mindustry.content.StatusEffects;
 import mindustry.type.Item;
-import mindustry.type.Liquid;
 
 public class InfernoItems {
     public static Item
@@ -19,9 +16,7 @@ public class InfernoItems {
 
     cermet, strontiumTitanate,
 
-    sitall
-
-    ;
+    sitall;
 
     //TODO progression sort
 

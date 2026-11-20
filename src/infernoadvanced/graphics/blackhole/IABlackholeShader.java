@@ -1,7 +1,7 @@
 package infernoadvanced.graphics.blackhole;
 
-import arc.*;
-import arc.graphics.gl.*;
+import arc.Core;
+import arc.graphics.gl.Shader;
 
 import static arc.Core.files;
 import static mindustry.Vars.tree;

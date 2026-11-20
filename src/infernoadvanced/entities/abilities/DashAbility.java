@@ -8,6 +8,7 @@ import arc.graphics.g2d.Lines;
 import arc.math.Angles;
 import arc.math.Mathf;
 import arc.math.geom.Vec2;
+import arc.struct.Seq;
 import arc.util.Time;
 import arc.util.Tmp;
 import mindustry.content.Fx;
@@ -16,79 +17,106 @@ import mindustry.entities.Units;
 import mindustry.entities.abilities.Ability;
 import mindustry.gen.Sounds;
 import mindustry.gen.Teamc;
-import mindustry.gen.Velc;
 import mindustry.gen.Unit;
+import mindustry.gen.Velc;
 import mindustry.graphics.Layer;
 import mindustry.type.StatusEffect;
-import arc.struct.Seq;
-import mindustry.graphics.Drawf;
 
 import static mindustry.Vars.indexer;
 
 /**
  * Рывок: юнит заряжает его, затем летит по прямой к цели и дальше на
  * overshoot, нанося урон всему на пути.
- *
+ * <p>
  * Старт: как только юнит СТРЕЛЯЕТ (и откат прошёл), рывок нацеливается на цель
- *   его стрельбы. Никаких своих поисков цели и ограничений по дальности:
- *   для ИИ это цель оружия, а если её нет, то точка прицела, для игрока точка прицела.
+ * его стрельбы. Никаких своих поисков цели и ограничений по дальности:
+ * для ИИ это цель оружия, а если её нет, то точка прицела, для игрока точка прицела.
  * Зарядка: угловой указатель направления + мигающий спрайт цветом команды
- *   (мигание рисует RollUnitType). Указатель следит за целью.
+ * (мигание рисует RollUnitType). Указатель следит за целью.
  * Рывок: курс фиксируется и не меняется. Здания не мешают, вражеские здания и
- *   юниты получают урон, юниты расталкиваются в стороны. Управление и
- *   стрельба заблокированы (статус dash-lock + принудительная скорость).
+ * юниты получают урон, юниты расталкиваются в стороны. Управление и
+ * стрельба заблокированы (статус dash-lock + принудительная скорость).
  */
 public class DashAbility extends Ability {
-    /** Время зарядки, тики. */
+    /**
+     * Время зарядки, тики.
+     */
     public float chargeTime = 60f * 1.4f;
-    /** Откат после рывка, тики. */
+    /**
+     * Откат после рывка, тики.
+     */
     public float cooldown = 60f * 10f;
-    /** Скорость рывка, юнитов за тик. */
+    /**
+     * Скорость рывка, юнитов за тик.
+     */
     public float dashSpeed = 11f;
     /**
      * Необязательные ограничения дальности до цели стрельбы.
      * 0 = отключено (по умолчанию): рывок зависит только от стрельбы.
      */
     public float minRange = 0f, maxRange = 0f;
-    /** Сколько пролетает за целью. */
+    /**
+     * Сколько пролетает за целью.
+     */
     public float overshoot = 80f;
-    /** Упреждение: целиться туда, где окажется движущаяся цель к моменту попадания. */
+    /**
+     * Упреждение: целиться туда, где окажется движущаяся цель к моменту попадания.
+     */
     public boolean predictTargets = true;
-    /** Максимальный вынос точки упреждения от текущей позиции цели. */
+    /**
+     * Максимальный вынос точки упреждения от текущей позиции цели.
+     */
     public float predictMaxLead = 200f;
-    /** Максимальная длина рывка. */
+    /**
+     * Максимальная длина рывка.
+     */
     public float maxDistance = 480f;
-
-    /** Урон за удар и интервал ударов, тики. */
+    /**
+     * Урон за удар и интервал ударов, тики.
+     */
     public float dashDamage = 70f;
     public float hitInterval = 5f;
     public float buildingDamageMultiplier = 0.5f;
-    /** Радиус поражения = hitSize / 2 + hitPadding. */
+    /**
+     * Радиус поражения = hitSize / 2 + hitPadding.
+     */
     public float hitPadding = 14f;
-    /** Сила расталкивания юнитов (зависит от массы цели). */
+    /**
+     * Сила расталкивания юнитов (зависит от массы цели).
+     */
     public float pushForce = 420f;
     public boolean pushAllies = false;
-
-    /** Цвет мигания и указателя; null = цвет команды. */
+    /**
+     * Цвет мигания и указателя; null = цвет команды.
+     */
     public Color color = null;
     public float indicatorRadius = 64f;
     public float indicatorAngle = 50f;
-
-    /** Постизображения */
+    /**
+     * Постизображения
+     */
     public float ghostInterval = 3f;
     public float ghostLifetime = 45f;
     public float ghostAlpha = 0.65f;
-
-    /** Звук зарядки (играет с интервалом). */
+    /**
+     * Звук зарядки (играет с интервалом).
+     */
     public Sound chargeSound = Sounds.chargeVela;
-    /** Интервал воспроизведения звука зарядки, тики. */
+    /**
+     * Интервал воспроизведения звука зарядки, тики.
+     */
     public float chargeSoundInterval = 12f;
-    /** Звук начала рывка. */
+    /**
+     * Звук начала рывка.
+     */
     public Sound dashSound = Sounds.none;
-    /** Звук попадания по врагу/зданию во время рывка. */
+    /**
+     * Звук попадания по врагу/зданию во время рывка.
+     */
     public Sound hitSound = Sounds.shieldHit;
-
-    /** Статус, блокирующий управление. Создаётся в load(). */
+    /**
+     * Статус, блокирующий управление. Создаётся в load().
+     */
     public static StatusEffect lockStatus;
 
     public static void load() {
@@ -316,7 +344,9 @@ public class DashAbility extends Ability {
         return color != null ? color : unit.team.color;
     }
 
-    /** Сила мигания спрайта: частота растёт к концу зарядки. */
+    /**
+     * Сила мигания спрайта: частота растёт к концу зарядки.
+     */
     public float blinkAlpha() {
         return Mathf.absin(Time.time * (1f + 3f * chargeProgress()), 3f, 1f) * 0.8f;
     }

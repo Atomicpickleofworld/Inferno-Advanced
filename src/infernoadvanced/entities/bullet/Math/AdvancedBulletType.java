@@ -25,7 +25,6 @@ public class AdvancedBulletType extends BulletType {
     public float baseSpeed = 3f;
 
 
-
     public boolean allowCollision = false;
     public TrajectoryCalculator trajectory = TrajectoryLib.straight(3f);
 

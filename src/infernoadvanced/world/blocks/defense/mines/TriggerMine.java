@@ -13,7 +13,6 @@ import mindustry.type.StatusEffect;
 import mindustry.world.Block;
 import mindustry.world.meta.Stat;
 import mindustry.world.meta.StatUnit;
-import mindustry.world.meta.StatValues;
 
 import static mindustry.Vars.tilesize;
 

@@ -11,13 +11,14 @@ import arc.graphics.gl.Shader;
 import arc.struct.Seq;
 import mindustry.game.EventType.Trigger;
 
-import static mindustry.Vars.*;
+import static mindustry.Vars.state;
 
-public class IAScreenFX{
-    private static class Pass{
+public class IAScreenFX {
+    private static class Pass {
         final Shader shader;
         final Boolp active;
-        Pass(Shader shader, Boolp active){
+
+        Pass(Shader shader, Boolp active) {
             this.shader = shader;
             this.active = active;
         }
@@ -28,49 +29,49 @@ public class IAScreenFX{
     private static FrameBuffer a, b;
     private static boolean capturing;
 
-    public static void add(Shader shader, Boolp active){
+    public static void add(Shader shader, Boolp active) {
         passes.add(new Pass(shader, active));
     }
 
-    public static void load(){
+    public static void load() {
         Events.run(Trigger.preDraw, IAScreenFX::begin);
         Events.run(Trigger.postDraw, IAScreenFX::end);
     }
 
-    private static void begin(){
+    private static void begin() {
         live.clear();
-        if(state.isGame()){
-            for(Pass p : passes){
-                if(p.active.get()) live.add(p.shader);
+        if (state.isGame()) {
+            for (Pass p : passes) {
+                if (p.active.get()) live.add(p.shader);
             }
         }
 
         capturing = live.size > 0;
-        if(!capturing) return;
+        if (!capturing) return;
 
-        if(a == null) a = new FrameBuffer();
+        if (a == null) a = new FrameBuffer();
         a.resize(Core.graphics.getWidth(), Core.graphics.getHeight());
         a.begin(Color.clear);
     }
 
-    private static void end(){
-        if(!capturing) return;
+    private static void end() {
+        if (!capturing) return;
         capturing = false;
 
         a.end();
         Draw.blend(Blending.disabled);
 
-        if(live.size == 1){
+        if (live.size == 1) {
             a.blit(live.first());
-        }else{
-            if(b == null) b = new FrameBuffer();
+        } else {
+            if (b == null) b = new FrameBuffer();
             int w = Core.graphics.getWidth(), h = Core.graphics.getHeight();
             FrameBuffer src = a, dst = b;
 
-            for(int i = 0; i < live.size; i++){
-                if(i == live.size - 1){
+            for (int i = 0; i < live.size; i++) {
+                if (i == live.size - 1) {
                     src.blit(live.get(i));
-                }else{
+                } else {
                     dst.resize(w, h);
                     dst.begin(Color.clear);
                     src.blit(live.get(i));

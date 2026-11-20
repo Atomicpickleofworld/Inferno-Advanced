@@ -9,8 +9,8 @@ import infernoadvanced.graphics.IAPal;
 import mindustry.entities.bullet.BasicBulletType;
 import mindustry.entities.bullet.BulletType;
 import mindustry.entities.effect.MultiEffect;
-import mindustry.game.Team;
 import mindustry.game.EventType.Trigger;
+import mindustry.game.Team;
 import mindustry.graphics.Drawf;
 import mindustry.world.blocks.power.NuclearReactor;
 

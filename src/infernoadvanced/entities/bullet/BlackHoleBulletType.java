@@ -1,20 +1,26 @@
 package infernoadvanced.entities.bullet;
 
 import arc.audio.Sound;
-import arc.graphics.*;
-import arc.graphics.g2d.*;
-import arc.math.*;
-import arc.util.*;
+import arc.graphics.Blending;
+import arc.graphics.Color;
+import arc.graphics.g2d.Draw;
+import arc.graphics.g2d.Fill;
+import arc.graphics.g2d.Lines;
+import arc.math.Mathf;
+import arc.util.Time;
+import arc.util.Tmp;
 import infernoadvanced.content.InfernoStatusEffects;
 import infernoadvanced.graphics.IAFx;
 import infernoadvanced.graphics.IAPal;
 import infernoadvanced.graphics.blackhole.IABlackholeRenderer;
 import infernoadvanced.loaders.IASounds;
 import mindustry.Vars;
-import mindustry.entities.*;
-import mindustry.entities.bullet.*;
-import mindustry.gen.*;
-import mindustry.graphics.*;
+import mindustry.entities.Effect;
+import mindustry.entities.Units;
+import mindustry.entities.bullet.BasicBulletType;
+import mindustry.gen.Bullet;
+import mindustry.gen.Sounds;
+import mindustry.graphics.Layer;
 
 public class BlackHoleBulletType extends BasicBulletType {
     public float pullRadius = 120f;

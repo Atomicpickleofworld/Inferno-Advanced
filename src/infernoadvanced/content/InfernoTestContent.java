@@ -18,14 +18,14 @@ import mindustry.world.blocks.storage.CoreBlock;
 import mindustry.world.meta.BuildVisibility;
 import mindustry.world.meta.Env;
 
-public class InfernoTestContent{
+public class InfernoTestContent {
     public static UnitType testDrone;
     public static CoreBlock testCore;
 
     //TODO delete
 
-    public static void load(){
-        testDrone = new UnitType("inferno-test-drone"){{
+    public static void load() {
+        testDrone = new UnitType("inferno-test-drone") {{
             controller = u -> u.team.isAI() ? new BuilderAI(true, 400f) : new CommandAI();
             coreUnitDock = true;
             isEnemy = false;
@@ -59,7 +59,7 @@ public class InfernoTestContent{
             range = 60f;
             targetPriority = -2f;
 
-            weapons.add(new BuildWeapon("build-weapon"){{
+            weapons.add(new BuildWeapon("build-weapon") {{
                 rotate = true;
                 rotateSpeed = 7f;
                 x = 0f;
@@ -75,7 +75,7 @@ public class InfernoTestContent{
             });
         }};
 
-        testCore = new CoreBlock("inferno-test-core"){{
+        testCore = new CoreBlock("inferno-test-core") {{
             size = 3;
             health = 1400;
             itemCapacity = 900;
@@ -96,14 +96,14 @@ public class InfernoTestContent{
         }};
     }
 
-    public static Schematic loadout(){
+    public static Schematic loadout() {
         return new Schematic(
-                Seq.with(new Stile(testCore, 0, 0, null, (byte)0)),
+                Seq.with(new Stile(testCore, 0, 0, null, (byte) 0)),
                 new StringMap(), testCore.size, testCore.size
         );
     }
 
-    public static void assignPlanet(Planet planet){
+    public static void assignPlanet(Planet planet) {
         testCore.shownPlanets.add(planet);
         testDrone.shownPlanets.add(planet);
     }

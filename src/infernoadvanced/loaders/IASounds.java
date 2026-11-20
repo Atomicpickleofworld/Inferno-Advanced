@@ -1,7 +1,7 @@
 package infernoadvanced.loaders;
 
-import arc.audio.*;
-import mindustry.*;
+import arc.audio.Sound;
+import mindustry.Vars;
 import mindustry.gen.Sounds;
 
 public class IASounds {
@@ -13,8 +13,7 @@ public class IASounds {
             hailLaunch,
             falconDash,
             windyMovement,
-            parry
-                    ;
+            parry;
 
     public static void load() {
         hailLaunch = Vars.tree.loadSound("hail-launch");
@@ -22,8 +21,8 @@ public class IASounds {
         blackholeLoop = Vars.tree.loadSound("blackhole-loop");
         shootSwift = Vars.tree.loadSound("shootSwift");
         falconDash = Vars.tree.loadSound("falcon-dash");
-        windyMovement =  Vars.tree.loadSound("windy-movement");
-        parry =  Vars.tree.loadSound("parry");
+        windyMovement = Vars.tree.loadSound("windy-movement");
+        parry = Vars.tree.loadSound("parry");
         shootWren = Sounds.shootAlpha;
     }
 }

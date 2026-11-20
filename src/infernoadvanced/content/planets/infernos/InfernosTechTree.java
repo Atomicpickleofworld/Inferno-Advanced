@@ -7,10 +7,11 @@ import infernoadvanced.content.InfernoTestContent;
 import mindustry.content.Items;
 import mindustry.content.Liquids;
 
-import static mindustry.content.TechTree.*;
+import static mindustry.content.TechTree.nodeProduce;
+import static mindustry.content.TechTree.nodeRoot;
 
-public class InfernosTechTree{
-    public static void load(){
+public class InfernosTechTree {
+    public static void load() {
         InfernoPlanets.infernos.techTree = nodeRoot("infernos", InfernoTestContent.testCore, () -> {
 
             nodeProduce(InfernoItems.ferrite, () -> {

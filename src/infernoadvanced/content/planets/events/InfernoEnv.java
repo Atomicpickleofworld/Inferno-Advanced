@@ -6,23 +6,21 @@ import arc.graphics.Color;
 import arc.graphics.g2d.Draw;
 import arc.graphics.g2d.Fill;
 import arc.graphics.gl.Shader;
-import infernoadvanced.content.planets.events.SolarStorm;
 import mindustry.game.EventType.Trigger;
 import mindustry.graphics.Layer;
 
 import static arc.Core.camera;
-import static mindustry.Vars.*;
 
-public class InfernoEnv{
+public class InfernoEnv {
     private static final Color hazeColor = Color.valueOf("ff5a1a");
     private static final float MAX_ALPHA = 0.3f;
 
-    public static void load(){
+    public static void load() {
         Events.run(Trigger.draw, InfernoEnv::drawHaze);
     }
 
-    private static void drawHaze(){
-        if(SolarStorm.intensity <= 0.02f) return;
+    private static void drawHaze() {
+        if (SolarStorm.intensity <= 0.02f) return;
         float in = SolarStorm.intensity;
 
         Draw.draw(Layer.weather + 1f, () -> {
@@ -32,7 +30,7 @@ public class InfernoEnv{
         });
 
         Shader s = HeatHaze.get();
-        if(s != null && in > 0.15f){
+        if (s != null && in > 0.15f) {
             HeatHaze.intensity = in;
             Draw.draw(Layer.weather + 2f, () -> {
                 Draw.shader(s);

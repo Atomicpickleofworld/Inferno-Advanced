@@ -8,7 +8,6 @@ import arc.graphics.g2d.Lines;
 import arc.math.Angles;
 import arc.math.Mathf;
 import arc.math.Rand;
-import arc.util.Time;
 import mindustry.content.Fx;
 import mindustry.content.StatusEffects;
 import mindustry.entities.Effect;
@@ -16,8 +15,6 @@ import mindustry.entities.Units;
 import mindustry.entities.bullet.BulletType;
 import mindustry.gen.Bullet;
 import mindustry.graphics.Drawf;
-
-import static infernoadvanced.graphics.IAFx.rand;
 
 public class PushBulletType extends BulletType {
 
@@ -105,7 +102,7 @@ public class PushBulletType extends BulletType {
             float dx = unit.x - b.x;
             float dy = unit.y - b.y;
             float dist = Mathf.len(dx, dy);
-            if(dist < 0.01f) return;
+            if (dist < 0.01f) return;
 
             float dot = dx * forwardX + dy * forwardY;
 
@@ -113,7 +110,7 @@ public class PushBulletType extends BulletType {
             float perpY = dy - forwardY * dot;
             float perpLen = Mathf.len(perpX, perpY);
 
-            if(perpLen > 0.01f){
+            if (perpLen > 0.01f) {
                 perpX /= perpLen;
                 perpY /= perpLen;
             }
@@ -128,7 +125,7 @@ public class PushBulletType extends BulletType {
 
             unit.vel.add(pushX, pushY);
 
-            if(b.timer(1, pushInterval)){
+            if (b.timer(1, pushInterval)) {
                 unit.damage(damage);
                 unit.apply(StatusEffects.slow, slowDuration);
             }

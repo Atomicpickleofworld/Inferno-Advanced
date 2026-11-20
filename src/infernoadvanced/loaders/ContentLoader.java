@@ -1,7 +1,6 @@
 package infernoadvanced.loaders;
 
 import arc.util.Log;
-import infernoadvanced.compat.IACompat;
 import infernoadvanced.content.*;
 import infernoadvanced.content.planets.infernos.InfernosTechTree;
 import infernoadvanced.graphics.blackhole.IABlackholeRenderer;

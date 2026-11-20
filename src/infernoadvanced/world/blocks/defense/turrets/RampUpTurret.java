@@ -9,7 +9,7 @@ import mindustry.world.meta.StatUnit;
 
 
 public class RampUpTurret extends ItemTurret {
-    
+
     public float maxHeat = 100f;
     public float heatPerShot = 0.5f;
     public float coolDownPerTick = 0.2f;
@@ -26,29 +26,29 @@ public class RampUpTurret extends ItemTurret {
     public void setStats() {
         super.setStats();
         stats.add(Stat.reload, 60f / reload * shoot.shots, StatUnit.perSecond);
-        stats.add(Stat.reload, "Ускорение до " + (int)maxReloadMultiplier + "x");
-        stats.add(Stat.range, "Нагрев: " + (int)maxHeat);
+        stats.add(Stat.reload, "Ускорение до " + (int) maxReloadMultiplier + "x");
+        stats.add(Stat.range, "Нагрев: " + (int) maxHeat);
     }
 
     @Override
     public void setBars() {
         super.setBars();
-        
+
         if (showHeatBar) {
             addBar("heat", (RampUpBuild entity) ->
-                new Bar(
-                    () -> "Нагрев: " + (int)(entity.currentHeat / maxHeat * 100) + "%",
-                    () -> Pal.lightOrange,
-                    () -> entity.currentHeat / maxHeat
-                )
+                    new Bar(
+                            () -> "Нагрев: " + (int) (entity.currentHeat / maxHeat * 100) + "%",
+                            () -> Pal.lightOrange,
+                            () -> entity.currentHeat / maxHeat
+                    )
             );
-            
+
             addBar("speed", (RampUpBuild entity) ->
-                new Bar(
-                    () -> "Скорость: " + (int)(entity.getReloadMultiplier() * 100) + "%",
-                    () -> Pal.accent,
-                    () -> entity.getReloadMultiplier() / maxReloadMultiplier
-                )
+                    new Bar(
+                            () -> "Скорость: " + (int) (entity.getReloadMultiplier() * 100) + "%",
+                            () -> Pal.accent,
+                            () -> entity.getReloadMultiplier() / maxReloadMultiplier
+                    )
             );
         }
     }
@@ -61,17 +61,17 @@ public class RampUpTurret extends ItemTurret {
         @Override
         public void updateTile() {
             updateHeat();
-            
+
             float multiplier = getReloadMultiplier();
             reloadCounter += delta() * multiplier * baseReloadSpeed();
             reloadCounter = Math.min(reloadCounter, reload);
-            
+
             super.updateTile();
         }
 
         protected void updateHeat() {
             boolean isShootingNow = isShooting() && hasAmmo() && shootWarmup >= minWarmup;
-            
+
             if (isShootingNow && currentHeat < maxHeat) {
                 currentHeat += heatPerShot * delta() * (1f + currentHeat / maxHeat * 0.5f);
                 currentHeat = Math.min(currentHeat, maxHeat);
@@ -88,7 +88,7 @@ public class RampUpTurret extends ItemTurret {
 
         public float getReloadMultiplier() {
             if (currentHeat <= 0) return 1f;
-            
+
             float progress = currentHeat / maxHeat;
             float multiplier = 1f + (maxReloadMultiplier - 1f) * (progress * progress);
             return Mathf.clamp(multiplier, 1f, maxReloadMultiplier);
@@ -116,7 +116,7 @@ public class RampUpTurret extends ItemTurret {
         public float efficiency() {
             float baseEfficiency = efficiencyScale();
             if (currentHeat <= 0) return baseEfficiency;
-            
+
             float heatBonus = 0.5f + 0.5f * (currentHeat / maxHeat);
             return baseEfficiency * heatBonus;
         }

@@ -15,9 +15,9 @@ import mindustry.graphics.g3d.MeshBuilder;
 import mindustry.graphics.g3d.PlanetParams;
 import mindustry.type.Planet;
 
-import static mindustry.Vars.*;
+import static mindustry.Vars.renderer;
 
-public class EruptionMesh implements GenericMesh{
+public class EruptionMesh implements GenericMesh {
     private static final int DIVISIONS = 5;
 
     private static final String VERT = String.join("\n",
@@ -91,34 +91,36 @@ public class EruptionMesh implements GenericMesh{
     private final Mesh mesh;
     private final float[] waveData = new float[SolarActivity.WAVES * 4];
     private final float[] shapeData = new float[SolarActivity.WAVES * 4];
-    /** Шейдер создаётся лениво в render(): там есть контекст OpenGL, в конструкторе его нет. */
+    /**
+     * Шейдер создаётся лениво в render(): там есть контекст OpenGL, в конструкторе его нет.
+     */
     private Shader shader;
     private boolean shaderFailed;
 
-    public EruptionMesh(Planet star){
+    public EruptionMesh(Planet star) {
         this.reach = SolarActivity.REACH - star.radius;
-        this.mesh = MeshBuilder.buildHex(new HexMesher(){
+        this.mesh = MeshBuilder.buildHex(new HexMesher() {
             @Override
-            public float getHeight(Vec3 position){
+            public float getHeight(Vec3 position) {
                 return 0f;
             }
 
             @Override
-            public void getColor(Vec3 position, Color out){
+            public void getColor(Vec3 position, Color out) {
                 out.set(Color.white);
             }
         }, DIVISIONS, star.radius, 0f);
     }
 
-    private boolean ensureShader(){
-        if(shader != null) return true;
-        if(shaderFailed) return false;
+    private boolean ensureShader() {
+        if (shader != null) return true;
+        if (shaderFailed) return false;
 
-        try{
+        try {
             shader = new Shader(VERT, FRAG);
             Log.info("EruptionMesh: shader compiled");
             return true;
-        }catch(Exception e){
+        } catch (Exception e) {
             shaderFailed = true;
             Log.err("EruptionMesh: shader compilation failed, eruptions disabled", e);
             return false;
@@ -126,8 +128,8 @@ public class EruptionMesh implements GenericMesh{
     }
 
     @Override
-    public void render(PlanetParams params, Mat3D projection, Mat3D transform){
-        if(!ensureShader()) return;
+    public void render(PlanetParams params, Mat3D projection, Mat3D transform) {
+        if (!ensureShader()) return;
 
         float seconds = Time.globalTime / 60f;
         SolarActivity.fill(seconds, waveData, shapeData);
@@ -147,8 +149,8 @@ public class EruptionMesh implements GenericMesh{
     }
 
     @Override
-    public void dispose(){
+    public void dispose() {
         mesh.dispose();
-        if(shader != null) shader.dispose();
+        if (shader != null) shader.dispose();
     }
 }

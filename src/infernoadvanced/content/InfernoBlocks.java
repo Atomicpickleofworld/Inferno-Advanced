@@ -11,7 +11,6 @@ import infernoadvanced.world.blocks.defense.mines.TriggerMine;
 import infernoadvanced.world.blocks.defense.mines.TripwireMine;
 import infernoadvanced.world.blocks.defense.other.GasVent;
 import infernoadvanced.world.blocks.defense.turrets.GammaChargeTurret;
-import infernoadvanced.world.blocks.power.StrontiumReactor;
 import infernoadvanced.world.blocks.production.FloorLiquidExtracter;
 import mindustry.content.Fx;
 import mindustry.content.Items;
@@ -36,7 +35,6 @@ import mindustry.world.draw.*;
 import mindustry.world.meta.Attribute;
 import mindustry.world.meta.Env;
 
-import static infernoadvanced.content.InfernoBullets.reactorBlastFrag;
 import static mindustry.type.ItemStack.with;
 
 public class InfernoBlocks {
@@ -63,9 +61,7 @@ public class InfernoBlocks {
     sievert, singularityCannon,
 
     //turrets-erekir
-    archimedes
-
-    ;
+    archimedes;
 
     /*
     regions:
@@ -82,7 +78,6 @@ public class InfernoBlocks {
             mapColor.set(IAPal.celestine).mul(0.85f);
             oreDefault = false;
         }};
-
 
 
         //1.1-region Crafters
@@ -148,7 +143,9 @@ public class InfernoBlocks {
 
             drawer = new DrawMulti(
                     new DrawRegion("-bottom"),
-                    new DrawLiquidTile(InfernoLiquids.carbonDioxide) {{ alpha = 0.35f; }},
+                    new DrawLiquidTile(InfernoLiquids.carbonDioxide) {{
+                        alpha = 0.35f;
+                    }},
                     new DrawDefault(),
                     new DrawGlowRegion() {{
                         color = IAPal.celestineGlow;
@@ -190,7 +187,9 @@ public class InfernoBlocks {
 
             drawer = new DrawMulti(
                     new DrawRegion("-bottom"),
-                    new DrawLiquidTile() {{ drawLiquidLight = true; }},
+                    new DrawLiquidTile() {{
+                        drawLiquidLight = true;
+                    }},
                     new DrawRegion("-rotor") {{
                         spinSprite = true;
                         rotateSpeed = 3f;
@@ -271,7 +270,9 @@ public class InfernoBlocks {
 
             drawer = new DrawMulti(
                     new DrawRegion("-bottom"),
-                    new DrawLiquidTile(Liquids.water) {{ alpha = 0.5f; }},
+                    new DrawLiquidTile(Liquids.water) {{
+                        alpha = 0.5f;
+                    }},
                     new DrawDefault(),
                     new DrawGlowRegion() {{
                         color = IAPal.cesium137Glow;
@@ -312,7 +313,9 @@ public class InfernoBlocks {
 
             drawer = new DrawMulti(
                     new DrawRegion("-bottom"),
-                    new DrawLiquidTile() {{ drawLiquidLight = true; }},
+                    new DrawLiquidTile() {{
+                        drawLiquidLight = true;
+                    }},
                     new DrawDefault(),
                     new DrawGlowRegion() {{
                         color = IAPal.barium133Glow;
@@ -355,7 +358,7 @@ public class InfernoBlocks {
             effectChance = 0.01f;
         }};
 
-        sandOilRig = new FloorLiquidExtracter("sand-oil-rig"){{
+        sandOilRig = new FloorLiquidExtracter("sand-oil-rig") {{
             requirements(Category.production, with(
                     Items.copper, 150,
                     Items.graphite, 175,
@@ -445,7 +448,7 @@ public class InfernoBlocks {
             shootY = 3f;
 
             shoot = new ShootBarrel() {{
-                barrels = new float[] {
+                barrels = new float[]{
                         -3f, 6f, 0f,
                         0f, 6f, 0f,
                         3f, 6f, 0f
@@ -526,7 +529,7 @@ public class InfernoBlocks {
             shootY = 9f;
 
             shoot = new ShootBarrel() {{
-                barrels = new float[] {
+                barrels = new float[]{
                         -3f, 2f, 0f,
                         3f, 2f, 0f,
                         -5f, -2f, 0f,
@@ -625,9 +628,9 @@ public class InfernoBlocks {
             recoilTime = 15f;
             shootY = 0f;
             shoot = new ShootBarrel() {{
-                barrels = new float[] {
-                         -10f, 12f, 0f, -6f, 12f, 0f, -2f, 12f, 0f,
-                        2f, 12f, 0f,    6f, 12f, 0f,  10f, 12f, 0f,
+                barrels = new float[]{
+                        -10f, 12f, 0f, -6f, 12f, 0f, -2f, 12f, 0f,
+                        2f, 12f, 0f, 6f, 12f, 0f, 10f, 12f, 0f,
                 };
                 shots = 42;
                 shotDelay = 10f;

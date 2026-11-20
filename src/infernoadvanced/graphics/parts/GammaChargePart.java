@@ -1,13 +1,20 @@
 package infernoadvanced.graphics.parts;
 
-import arc.graphics.*;
-import arc.graphics.g2d.*;
-import arc.math.*;
-import arc.util.*;
-import mindustry.entities.part.*;
-import mindustry.graphics.*;
+import arc.graphics.Blending;
+import arc.graphics.Color;
+import arc.graphics.g2d.Draw;
+import arc.graphics.g2d.Fill;
+import arc.graphics.g2d.Lines;
+import arc.math.Angles;
+import arc.math.Interp;
+import arc.math.Mathf;
+import arc.math.Rand;
+import arc.util.Time;
+import mindustry.entities.part.DrawPart;
+import mindustry.graphics.Drawf;
+import mindustry.graphics.Layer;
 
-public class GammaChargePart extends DrawPart{
+public class GammaChargePart extends DrawPart {
 
     public float muzzleOffset = 0f;
     public float layer = Layer.effect;
@@ -46,12 +53,12 @@ public class GammaChargePart extends DrawPart{
     private static final Rand rand = new Rand();
 
     @Override
-    public void draw(PartParams params){
+    public void draw(PartParams params) {
         float charge = params.charge;
-        if(charge <= 0.0001f) return;
+        if (charge <= 0.0001f) return;
 
         float z = Draw.z();
-        if(layer > 0f) Draw.z(layer);
+        if (layer > 0f) Draw.z(layer);
 
         float rot = params.rotation;
         float mx = params.x + Angles.trnsx(rot, muzzleOffset);
@@ -62,9 +69,9 @@ public class GammaChargePart extends DrawPart{
 
         Draw.blend(Blending.additive);
 
-        if(drawRings){
-            for(int i = 0; i < rings; i++){
-                float rp = (Time.time / ringCycle + i / (float)rings) % 1f;
+        if (drawRings) {
+            for (int i = 0; i < rings; i++) {
+                float rp = (Time.time / ringCycle + i / (float) rings) % 1f;
                 float rr = Mathf.lerp(ringRadMax, ringRadMin, Interp.pow2Out.apply(rp)) * funnel;
                 Draw.color(color, colorTo, rp);
                 Draw.alpha((1f - rp) * 0.55f * chargeAlpha);
@@ -73,7 +80,7 @@ public class GammaChargePart extends DrawPart{
             }
         }
 
-        for(int i = 0; i < shapes; i++){
+        for (int i = 0; i < shapes; i++) {
             rand.setSeed(i * 7919 + 13);
             float speed = rand.random(0.7f, 1.4f);
             float phase = rand.random(1f);
@@ -82,7 +89,7 @@ public class GammaChargePart extends DrawPart{
             float cyc = Time.time * speed / cycleTime + phase;
             float t = cyc % 1f;
 
-            rand.setSeed(i * 104729 + (int)cyc * 7919 + 13);
+            rand.setSeed(i * 104729 + (int) cyc * 7919 + 13);
             float spawnAngle = rand.random(360f);
             float spawnDist = rand.random(spawnRadiusMin, spawnRadiusMax);
             float spinDir = rand.random(1f) < 0.5f ? 1f : -1f;
@@ -121,5 +128,6 @@ public class GammaChargePart extends DrawPart{
     }
 
     @Override
-    public void load(String name){}
+    public void load(String name) {
+    }
 }

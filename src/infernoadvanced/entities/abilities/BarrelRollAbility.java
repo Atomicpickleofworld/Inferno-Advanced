@@ -12,36 +12,51 @@ import mindustry.content.Fx;
 import mindustry.entities.abilities.Ability;
 import mindustry.gen.Bullet;
 import mindustry.gen.Groups;
-import mindustry.gen.Sounds;
 import mindustry.gen.Unit;
 import mindustry.graphics.Layer;
 
 /**
  * Переворот в воздухе («бочка»): во время переворота вражеские снаряды в
  * радиусе парирования отражаются (или поглощаются, если их нельзя отразить).
- *
+ * <p>
  * Запускается, когда юнит стреляет. С requireThreat = true переворот
  * включается только если рядом реально летит вражеский снаряд, чтобы не
  * тратить откат вхолостую.
- *
+ * <p>
  * Для визуального переворота спрайта используй RollUnitType.
  */
 public class BarrelRollAbility extends Ability {
-    /** Откат после переворота, тики. */
+    /**
+     * Откат после переворота, тики.
+     */
     public float cooldown = 60f * 5f;
-    /** Длительность переворота, тики. */
+    /**
+     * Длительность переворота, тики.
+     */
     public float duration = 36f;
-    /** Радиус парирования от центра юнита. */
+    /**
+     * Радиус парирования от центра юнита.
+     */
     public float parryRadius = 30f;
-    /** true: отражать снаряды обратно. false: только поглощать. */
+    /**
+     * true: отражать снаряды обратно. false: только поглощать.
+     */
     public boolean reflect = true;
-    /** Множитель урона отражённого снаряда. */
+    /**
+     * Множитель урона отражённого снаряда.
+     */
     public float reflectDamageMultiplier = 1f;
-    /** Запускать только при стрельбе. */
+    /**
+     * Запускать только при стрельбе.
+     */
     public boolean whenShooting = true;
-    /** Запускать только если рядом есть вражеский снаряд. */
+    /**
+     * Запускать только если рядом есть вражеский снаряд.
+     */
     public boolean requireThreat = true;
-    /** На каком расстоянии снаряд считается угрозой. */
+    /**
+     * На каком расстоянии снаряд считается угрозой.
+     */
     public float threatRadius = 90f;
     /**
      * Пассивный переворот: по whenShooting / requireThreat, как раньше.
@@ -57,23 +72,30 @@ public class BarrelRollAbility extends Ability {
     /**
      * Есть ли откат у переворота на выстрел.
      * true:  выстрельный переворот ждёт общий откат и запускает его после себя
-     *        (как пассивный, откат у них общий).
+     * (как пассивный, откат у них общий).
      * false: выстрельный переворот игнорирует откат и сам его не запускает,
-     *        так что он не мешает пассивным переворотам.
+     * так что он не мешает пассивным переворотам.
      * Пока переворот идёт, новый не стартует в любом случае.
      */
     public boolean shotRollHasCooldown = true;
-
-    /** Звук начала переворота. */
+    /**
+     * Звук начала переворота.
+     */
     public Sound rollSound = IASounds.windyMovement;
-    /** Звук парирования снаряда. */
+    /**
+     * Звук парирования снаряда.
+     */
     public Sound parrySound = IASounds.parry;
 
     protected float rollTime = 0f;
     protected float cooldownTime = 0f;
-    /** Текущий переворот запущен выстрелом (нужно для решения про откат). */
+    /**
+     * Текущий переворот запущен выстрелом (нужно для решения про откат).
+     */
     protected boolean rollFromShot = false;
-    /** reload каждого оружия на прошлом тике, чтобы заметить выстрел по скачку вверх. */
+    /**
+     * reload каждого оружия на прошлом тике, чтобы заметить выстрел по скачку вверх.
+     */
     protected float[] lastReload;
 
     private static Unit paramUnit;
@@ -105,8 +127,9 @@ public class BarrelRollAbility extends Ability {
             paramAbility.parrySound.at(b.x, b.y);
         }
     };
-
-    /** Был ли выстрел: после выстрела reload оружия возвращается к максимуму. */
+    /**
+     * Был ли выстрел: после выстрела reload оружия возвращается к максимуму.
+     */
     protected boolean detectShot(Unit unit) {
         var mounts = unit.mounts;
         if (lastReload == null || lastReload.length != mounts.length) {
@@ -171,8 +194,9 @@ public class BarrelRollAbility extends Ability {
         rollFromShot = fromShot;
         rollSound.at(unit.x, unit.y);
     }
-
-    /** Масштаб спрайта по ширине: имитация вращения вокруг продольной оси. */
+    /**
+     * Масштаб спрайта по ширине: имитация вращения вокруг продольной оси.
+     */
     public float scaleX() {
         if (rollTime <= 0f) return 1f;
         float p = 1f - rollTime / duration;
@@ -184,8 +208,9 @@ public class BarrelRollAbility extends Ability {
     public boolean rolling() {
         return rollTime > 0f;
     }
-
-    /** Масштаб переворота для юнита: 1, если способности нет или переворот не идёт. */
+    /**
+     * Масштаб переворота для юнита: 1, если способности нет или переворот не идёт.
+     */
     public static float scaleOf(Unit unit) {
         for (Ability a : unit.abilities) {
             if (a instanceof BarrelRollAbility roll) return roll.scaleX();

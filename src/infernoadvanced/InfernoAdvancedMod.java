@@ -1,8 +1,8 @@
 package infernoadvanced;
 
 import arc.Events;
-import arc.util.Log;
 import arc.util.Time;
+import inferno.ui.InfernoUI;
 import infernoadvanced.compat.IACompat;
 import infernoadvanced.content.planets.events.InfernoEnv;
 import infernoadvanced.graphics.IAScreenFX;
@@ -10,7 +10,6 @@ import infernoadvanced.graphics.SolarHeatShader;
 import infernoadvanced.loaders.ContentLoader;
 import infernoadvanced.loaders.IAMeta;
 import infernoadvanced.loaders.IASounds;
-import inferno.ui.InfernoUI;
 import mindustry.game.EventType.ClientLoadEvent;
 import mindustry.mod.Mod;
 

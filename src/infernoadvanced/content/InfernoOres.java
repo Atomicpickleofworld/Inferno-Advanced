@@ -14,7 +14,6 @@ public class InfernoOres {
     public static int veinSize = 14;
 
 
-
     public static void load() {
         Events.on(WorldLoadEvent.class, e -> {
             if (!Vars.state.isCampaign()) return;
